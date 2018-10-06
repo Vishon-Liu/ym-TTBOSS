@@ -1,0 +1,12 @@
+<!--pages/default/default.wxml-->
+<view class='page'>
+  <view wx:if="{{login}}">
+    未受邀窗口页面
+  </view>
+  <view class='scan' wx:else>
+    <image mode='widthFix' src='https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3791804952,2259576241&fm=58&bpow=777&bpoh=1024'></image>
+    <button  bindgetuserinfo="RequestAuth" open-type="getUserInfo" 
+    disabled="{{disabled}}">微信授权登录</button>
+  </view>
+  
+</view>

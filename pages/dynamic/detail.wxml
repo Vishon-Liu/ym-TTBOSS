@@ -1,0 +1,8 @@
+<!--pages/dynamic/detail.wxml-->
+<view class='page'>
+  <text class='title'>阿萨德法师打发阿萨德法师打发阿阿萨德法师打发萨德法师打发</text>
+  <view style='margin:.5rem 0'>
+    <text style='font-size:.8rem;color:#0079CC'>加推科技渠道事业部</text>
+    <text style='font-size:.8rem;margin-left:1rem;'>7月8日</text>
+  </view>
+</view>

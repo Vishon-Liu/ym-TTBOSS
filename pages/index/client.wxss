@@ -1,0 +1,78 @@
+/* pages/index/client.wxss */
+.murky{
+  position:fixed;
+  bottom: 0;
+  left: 0;
+  width:100%;
+  height:100%;
+  text-align:center;
+  background:rgba(0,0,0,0.8);
+  filter:Alpha(opacity=60);
+  z-index:9;
+}
+.calendarModel{
+  /* padding: 0 1rem; */
+  position: relative;
+  display: flex;
+  flex-flow: column nowrap;
+  z-index: 99;
+  background: white;
+}
+.calendar{
+  position: absolute;
+  top: 2.4rem;
+  left: 0;
+  width: 100%;
+  background: white;
+}
+/* ============================================== */
+.line1{
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  color: #575757;
+  background: #f4f4f4;
+  font-size: .8rem;
+  padding: .5rem;
+  box-sizing: border-box;
+  margin-bottom: .5rem;
+}
+.line1 .icon-rili{
+  display: flex;
+  align-items: center;
+}
+.info{
+  font-size: .8rem;
+  color: #575757;
+  padding: .5rem 1rem;
+}
+.line2{
+  font-size: .8rem;
+  color: #575757;
+  text-align: center;
+}
+.time{
+  font-weight: 600;
+  color:black;
+  margin-bottom: .5rem;
+}
+.behavior{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 .5rem;
+  box-sizing: border-box;
+  width: 100%;
+  height: 4rem;
+  box-shadow:0px 0px  10px 3px #DCDCDD;
+}
+.behavior image{
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  margin-right: .5rem;
+}
+.behavior view{
+  width: 80%;
+}

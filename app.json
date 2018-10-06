@@ -1,0 +1,60 @@
+{
+  "pages":[
+    "pages/my/dynamic/dynamic",
+    "pages/default/default",
+    
+    "pages/my/dynamic/promulgate/promulgate",
+    "pages/index/index",
+    "pages/personal/personal",
+    "pages/index/detail",
+    "pages/index/client",
+    "pages/message/message",
+    "pages/message/detail/detail",
+    "pages/dynamic/dynamic",
+    "pages/dynamic/detail",
+    "pages/my/setting/setting",
+    "pages/my/my"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle":"black"
+  },
+  "tabBar": {
+    "color": "#8a8a8a",
+    "selectedColor": "#103BFD",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "卡片",
+        "iconPath": "/images/radar.png",
+        "selectedIconPath": "/images/radar1.png"
+      },
+      {
+        "pagePath": "pages/message/message",
+        "text": "消息",
+        "iconPath": "/images/message.png",
+        "selectedIconPath": "/images/message1.png"
+      },
+      {
+        "pagePath": "pages/dynamic/dynamic",
+        "text": "动态",
+        "iconPath": "/images/dynamic.png",
+        "selectedIconPath": "/images/dynamic1.png"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "text": "我的",
+        "iconPath": "/images/my.png",
+        "selectedIconPath": "/images/my1.png"
+      }
+    ]
+  },
+  "plugins": {
+    "calendar": {
+      "version": "1.1.3",
+      "provider": "wx92c68dae5a8bb046"
+    }
+  }
+}

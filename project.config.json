@@ -1,0 +1,48 @@
+{
+	"description": "项目配置文件。",
+	"packOptions": {
+		"ignore": []
+	},
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.2.3",
+	"appid": "wx21962e3a2e011576",
+	"projectname": "TTBS_shop",
+	"isGameTourist": false,
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 0,
+			"list": [
+				{
+					"id": 0,
+					"name": "token",
+					"pathName": "pages/default/default",
+					"query": "token=52b3e2MjU3PT0nLxgYCFRzHBJyMHkmMTwAUHl+Dmks",
+					"scene": "1011"
+				}
+			]
+		}
+	}
+}

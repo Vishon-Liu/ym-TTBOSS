@@ -1,0 +1,88 @@
+/* pages/my/my.wxss */
+page{
+  background: #fff;
+}
+.bg{
+  width: 100%;
+  height: 5.5rem;
+  background: #0040ED;
+}
+.card{
+  width: 90%;
+  background: #fff;
+  box-shadow:0px 0px  10px 1px #DCDCDD;
+  position: absolute;
+  top: 3%;
+  left: 5%;
+  border-radius: .4rem;
+}
+.card_info{
+  display: flex;
+  justify-content: space-between;
+  flex-flow: row nowrap;
+  padding: .5rem .5rem .55rem .5rem;
+  border-bottom: 1rpx solid #eee;
+}
+.card_info image{
+  width: 3.5rem;
+  height: 3.5rem;
+}
+.card_info view{
+  width: 76%;
+  height: 3.5rem;
+  font-size: .7rem;
+  color: #575757;
+  display: flex;
+  flex-flow: column nowrap;
+}
+.poster{
+  height: 2rem;
+  display: flex;
+  font-size: .7rem;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 .5rem;
+}
+.poster view{
+  display: flex;
+  align-items: center;
+}
+.poster .iconfont{
+  font-size: 1rem;
+  margin-right: .5rem;
+  display: flex;
+}
+.info{
+  padding: 0 .5rem;
+  background: #fff;
+}
+.gap{
+ padding-top:2.5rem; 
+}
+.list{
+  width: 100%;
+  height: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: .8rem;
+  color: #575757;
+}
+.list .iconfont{
+  height: 1rem;
+  width: 1.2rem;
+  font-size: .8rem;
+  display: flex;
+  justify-content: center;
+  line-height: 1rem;
+  background: rgb(75, 205, 63);
+  color: #fff;
+}
+.list .list_info{
+  width: 90%;
+  height: 100%;
+  display: flex;
+  border-bottom: .1rpx solid #eee;
+  justify-content: space-between;
+  align-items: center;
+}

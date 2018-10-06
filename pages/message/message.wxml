@@ -1,0 +1,23 @@
+<!--pages/message/message.wxml-->
+<view class='page'>
+  <view class='chat'>
+    <image src='../../images/bosco1.jpg' mode='aspectFill'></image>
+    <view class='chat_info'>
+      <view class='name'>
+        <text>独孤孤独咕噜犊子</text>
+        <text style='font-size:.5rem'>2018/08/20 15:41</text>
+      </view>
+      <text> 撒旦法撒旦法是</text>
+    </view>
+  </view>
+  <view class='chat'>
+    <image src='../../images/bosco1.jpg' mode='aspectFill'></image>
+    <view class='chat_info'>
+      <view class='name'>
+        <text>独孤孤独咕噜犊子</text>
+        <text style='font-size:.5rem'>{{time}}</text>
+      </view>
+      <text> 撒旦法撒旦法是</text>
+    </view>
+  </view>
+</view>

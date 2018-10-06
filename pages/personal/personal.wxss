@@ -1,0 +1,80 @@
+/* pages/personal/personal.wxss */
+.page{
+  position: relative;
+}
+.avatar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0 .5rem 0;
+  margin: 0 1rem;
+  box-sizing: border-box;
+  font-size: .8rem;
+  color:#575757;
+}
+.avatar text{
+  font-weight: 600;
+}
+.Instagram{
+  display: flex;
+  flex-flow: column nowrap;
+  margin: 0 1rem;
+  box-sizing: border-box;
+  border-bottom: 1rpx solid #ccc;
+  font-size: .8rem;
+  color:#575757;
+}
+.close{
+  display: inline-flex;
+  position: absolute;
+  top: .5rem;
+  right: .5rem;
+  z-index:9;
+  background:#F23A3A;
+  border-radius:50%;
+  color:#fff;
+  padding: .2rem;
+  box-sizing: border-box;
+}
+.photo{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.Instagram text{
+  font-weight: 600;
+  margin-bottom: .5rem;
+}
+.avatar image{
+  width: 4rem;
+  max-height:4rem;
+}
+.item{
+  min-height: 3rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin: 0 1rem;
+  box-sizing: border-box;
+  border-bottom: 1rpx solid #ccc;
+  font-size: .8rem;
+  color:#575757;
+}
+.item text{
+  font-weight: 600;
+  margin-right: 1rem;
+}
+.item input{
+  font-weight: 600;
+  margin-right: 1rem;
+}
+.btn-area{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 1rem;
+}
+.btn-area button{
+  width: 40%;
+}

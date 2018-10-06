@@ -1,0 +1,105 @@
+<!--index.wxml-->
+<view hidden='{{murky}}' bindtap='close' class='murky' id='murky'></view>
+<view class='page'>
+  <!-- 选项卡 -->
+  <view class="swiper-tab">
+    <view class=" {{current==0 ? 'on' : ''}}" data-current="0" catchtap="swichNav">
+      <text >行为</text>
+    </view> 
+    <view class=" {{current==1 ? 'on' : ''}}" data-current="1" catchtap="swichNav">
+      <text >人</text>
+    </view>
+  </view>
+  <!-- 日期 -->
+  <view style='margin:.5rem 1rem;' class='calendarModel'>
+    <view class='line1'>
+      <text>七天内被查看的行为统计</text>
+      <icon bindtap='calendar' class='iconfont icon-rili'></icon>
+    </view>
+    <calendar wx:if='{{showCalendar}}' calendar-style="calendar" days-color="{{nowDateStyle}}" 
+    weeks-type='cn' active-type='rounded' binddayClick="dayClick" bindnextMonth="monitorMonth" 
+    bindprevMonth="monitorMonth"/>
+  </view>
+  <!-- 对应选项页 -->
+  <view class='swiper-box'>
+    <!-- 第一页 -->
+    <view style='padding:.5rem 1rem;' class="swiper-items" hidden="{{current!='0'}}">
+      <view class='line2'>
+        <view data-type='5' data-check='查看商品' bindtap='jump'>
+          <icon class='iconfont icon-shangpin'></icon>
+          <view class='sp'>
+            <text>咨询商品</text>
+            <text>{{behavior[5]}}</text>
+          </view>
+        </view>
+        <view data-type='1' data-check='查看官网' bindtap='jump'>
+          <icon class='iconfont icon-icon-test'></icon>
+          <view class='sp'>
+            <text>查看官网</text>
+            <text>{{behavior[1]}}</text>
+          </view>
+        </view>
+        <view data-type='2' data-check='复制微信' bindtap='jump'>
+          <icon class='iconfont icon-weixin'></icon>
+          <view class='sp'>
+            <text>复制微信</text>
+            <text>{{behavior[2]}}</text>
+          </view>
+        </view>
+        <view data-type='3' data-check='转发名片' bindtap='jump'>
+          <icon class='iconfont icon-icon--'></icon>
+          <view class='sp'>
+            <text>转发名片</text>
+            <text>{{behavior[3]}}</text>
+          </view>
+        </view>
+      </view>
+      <view class='line3'>
+        <view data-type='4' data-check='查看名片' bindtap='jump' class='list'>
+          <icon class='iconfont icon-yj'></icon>
+          <view class='list_info'>
+            <text>查看名片</text>
+            <text>{{behavior[4]}}</text>
+          </view>
+        </view>
+        <view data-type='6' data-check='点击喜欢' bindtap='jump' class='list'>
+          <icon class='iconfont icon-zan1'></icon>
+          <view class='list_info'>
+            <text>点击喜欢</text>
+            <text>{{behavior[6]}}</text>
+          </view>
+        </view>
+        <view data-type='7' data-check='拨打电话' bindtap='jump' class='list'>
+          <icon class='iconfont icon-lvyouzixun'></icon>
+          <view class='list_info'>
+            <text>拨打电话</text>
+            <text>{{behavior[7]}}</text>
+          </view>
+        </view>
+        <view data-type='8' data-check='查看动态' bindtap='jump' class='list'>
+          <icon class='iconfont icon-pengyouquan'></icon>
+          <view class='list_info'>
+            <text>查看动态</text>
+            <text>{{behavior[8]}}</text>
+          </view>
+        </view>
+        <view  data-type='9' data-check='保存电话' bindtap='jump' class='list'>
+          <icon class='iconfont icon-dianhua'></icon>
+          <view class='list_info'>
+            <text>保存电话</text>
+            <text>{{behavior[9]}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <!-- 第二页 -->
+    <view class="swiper-items" hidden="{{current!='1'}}">
+      <view class='line4'>
+        <view wx:for='{{client}}' bindtap='jump' class='list2' data-id='{{item.id}}'>
+          <image src='{{item.photo}}' mode='aspectFill'></image>
+          <view>{{item.nickname}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,29 @@
+/* pages/my/setting/setting.wxss */
+page{
+  background: #F0F0F0;
+}
+.list{
+  margin-top: .8rem;
+  background: #fff;
+  padding: 0 .5rem;
+}
+.list .l1{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .5rem 0;
+  border-bottom: 1rpx solid #F0F0F0;
+}
+.list .l1 view{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.list .l1 image{
+  width: 3rem;
+  height: 3rem;
+}
+.list .iconfont{
+  display: flex;
+  font-size: 1rem;
+}

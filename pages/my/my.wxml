@@ -1,0 +1,40 @@
+<!--pages/my/my.wxml-->
+<view class='page'>
+  <view class='bg'></view>
+  <view class='card'>
+    <view class='card_info'>
+      <image mode='aspectFill' src='/images/bosco1.jpg'></image>
+      <view>
+        <text style='font-size:.8rem;font-weight:600;margin-bottom:.4rem;'>独孤孤独咕噜犊子</text>
+        <text>香港明星</text>
+        <text>娱乐圈</text>
+      </view>
+    </view>
+    <view class='poster'>
+      <view>
+        <icon style='color:#0040ED;' class='iconfont icon-mingpian'></icon>
+        <text>名片海报</text>
+      </view>
+      <view>
+        <icon class='iconfont icon-shezhi'></icon>
+        <icon class='iconfont icon-arrow-right'></icon>
+      </view>
+    </view>
+  </view>
+  <view class='info gap'>
+    <view class='list'>
+      <icon class='iconfont icon-pengyouquan'></icon>
+      <view class='list_info' bindtap='toDynamic'>
+        <text>我的动态</text>
+        <icon style='background:#fff;color:#575757;' class='iconfont icon-shuangjiantouyou'></icon>
+      </view>
+    </view>
+    <!-- <view class='list'>
+      <icon class='iconfont icon-yj'></icon>
+      <view class='list_info'>
+        <text>查看名片</text>
+        <text>45</text>
+      </view>
+    </view> -->
+  </view>
+</view>

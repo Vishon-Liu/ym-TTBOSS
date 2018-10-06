@@ -1,0 +1,17 @@
+/* pages/message/detail/detail.wxss */
+/* .falls{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+.falls image{
+  width: 48%;
+  margin-bottom:.5rem; 
+  vertical-align: top;
+} */
+.img_item {
+  width: 48%;
+  margin: 1%;
+  display: inline-block;
+  vertical-align: top;
+}

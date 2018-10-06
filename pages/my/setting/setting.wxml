@@ -1,0 +1,13 @@
+<!--pages/my/setting/setting.wxml-->
+<view class='page'>
+  <view class='list'>
+    <view class='l1' bindtap='setVia'>
+      <text>头像</text>
+      <view>
+        <image mode='aspectFill' src='/images/bosco1.jpg'></image>
+        <icon class='iconfont icon-arrow-right'></icon>
+      </view>
+    </view>
+    <view>阿斯蒂芬</view>
+  </view>
+</view>

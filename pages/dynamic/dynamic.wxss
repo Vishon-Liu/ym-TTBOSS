@@ -1,0 +1,192 @@
+/* pages/dynamic/dynamic.wxss */
+/* @import "/app.wxss"; */
+/* 页面 */
+page{
+  background: #fff;
+}
+.murky{
+  position:fixed;
+  bottom: 0;
+  left: 0;
+  width:100%;
+  height:100%;
+  text-align:center;
+  background:rgba(0,0,0,0);
+  filter:Alpha(opacity=60);
+  z-index:9;
+}
+.dynamic{
+  display: flex;
+  padding: .8rem;
+  box-sizing: border-box;
+  border-bottom:1rpx solid #d3d3d3;
+}
+.dynamic>image{
+  width: 3rem;
+  height: 3rem;
+  margin-right: .8rem;
+}
+.box{
+  width: 80%;
+}
+.article{
+  width: 100%;
+  height: 4rem;
+  background: #F3F3F5;
+  padding: .5rem;
+  display: flex;
+  margin-bottom: .8rem;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+.article image{
+  width: 3rem;
+  height: 3rem;
+}
+.article text{
+  width: 75%;
+  display: -webkit-box;
+  font-size:1rem;
+  line-height: 1.5rem;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp:2;
+  overflow: hidden;
+  text-overflow:ellipsis;
+}
+.box .a{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: .8rem;
+}
+.box .t{
+  font-size: .9rem;
+  margin-bottom:.5rem; 
+}
+.box .p{
+  margin-top: .5rem;
+  width: 100%;
+}
+.box .p image{
+  max-width: 60%;
+  max-height: 10rem;
+}
+.box .f{
+  width: 90%;
+}
+.box .f image{
+  max-width: 6rem;
+  height: 6rem;
+  margin: 0 .4rem .4rem 0;
+}
+.box .m{
+  margin-top: .5rem;
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: start;
+  align-items: center;
+}
+.box .m image{
+  width: 30%;
+  height: 5rem;
+  margin: 0 .4rem .4rem 0;
+}
+.box .pl{
+  display: flex;
+  height:2rem;
+  justify-content: space-between;
+  align-items: center;
+}
+.time{
+  width: 4rem;
+  font-size: .6rem;
+  color: #6F6F6F;
+}
+.info{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+  height: 2rem;
+  width: 9rem;
+  overflow: hidden;
+  position: relative;
+}
+.infoBox{
+  width: 9rem;
+  height: 2rem;
+  position: absolute;
+  left: 9rem;
+  z-index: 10;
+}
+.infoBox view{
+  background: #4C5155;
+  height: 2rem;
+  border-radius: .3rem;
+  display: flex;
+  margin: 0 auto;
+}
+.zan{
+  display: flex;
+  align-items: center;
+  color: #fff;
+  height: 2rem;
+  justify-content: center;
+}
+.pl image{
+  width: 1rem;
+  height: .8rem;
+  margin-left: .5rem;
+}
+.box .ly{
+  width: 100%;
+  background: #F3F3F5;
+  position: relative;
+  margin-top:.5rem;
+  padding: .3rem;
+  box-sizing: border-box;
+}
+.box .ly::before{
+  content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-bottom: 8px solid #F3F3F5;
+    position: absolute;
+    top: -16px;
+    left: 10px;
+}
+.box .ly .like{
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  font-size: .8rem;
+  font-weight:600;
+  color: #626F9C;
+  padding-bottom: .2rem;
+  box-sizing: border-box;
+}
+.box .ly .like icon{
+  display: flex;
+  align-items: center;
+  margin-right: .3rem;
+}
+.box .ly .message{
+  padding-top:.2rem;
+  box-sizing: border-box; 
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+}
+.box .ly .message view{
+  display: block;
+  font-size: .8rem;
+  margin-bottom: .2rem;
+}
+/* .box .ly .message view text{
+  color: #626F9C;
+  font-weight:600;
+} */
