@@ -6,7 +6,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    thumbWidth: 250,//压缩宽度
+    thumbWidth: 450,//压缩宽度
     thumbHeight: 0,//压缩高度
     current: 0,//照片当前指标数
     photo:[],
@@ -15,13 +15,20 @@ Page({
 
   //发布
   promulgate(){
-    console.log({'msg':this.data.msg});
+    console.log({'msg':this.data.msg,'photo':this.data.photo});
     var that = this;
     var url = app.d.hostUrl + 'Dynamic/add';
     var data = { 'content': that.data.msg, 'photo_wall':that.data.photo};
-    app.http(url,data,'post',function(res){
-      console.log({'看下情况':res});
-    });
+    if (this.data.msg){
+      app.http(url, data, 'post', function (res) {
+        wx.navigateTo({
+          url: '../dynamic',
+        })
+      });
+      // return console.log('ojbk');
+    }else{
+      app.warn('写点想法吧');
+    }
   },
   //获取输入内容
   bindInput(e){
@@ -36,16 +43,14 @@ Page({
       sizeType: ['compressed'],
       success: function(res) {
         console.log({ '选择图片的返回数据': res });
-        var tempFilePaths = res.tempFilePaths;
-        var tempFiles = res.tempFiles;
-        console.log({ 'tempFilePaths': tempFilePaths, 'tempFiles': tempFiles });
-        for (var i = 0; i < tempFilePaths.length; i++) {
-          that.compress(tempFilePaths[i], '450', false, function (res) {
+        res.tempFilePaths.forEach(v => {
+          console.log({'遍历每一张图':v});
+          that.compress(v, '450', false, function (res) {
             that.setData({
               photo: that.data.photo.concat(res.tempFilePath)
             });
           });
-        }
+        })
       },
     })
   },
@@ -101,6 +106,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log({ '啥玩意': options})
+
   }
 })
