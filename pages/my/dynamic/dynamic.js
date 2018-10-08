@@ -7,6 +7,7 @@ Page({
    */
   data: {
     page: 1,
+    thisDH:'',
     show: false,
     tip: '',
     load: true,
@@ -26,7 +27,7 @@ Page({
     this.showPl();
   },
   // 弹出评论
-  showPl: function () {
+  showPl(e) {
     this.setData({ show: !this.data.show, murky: !this.data.murky });
     var animation = wx.createAnimation({     //评论动画   点击弹出缩入
       transformOrigin: "50% 50%",
@@ -37,13 +38,15 @@ Page({
     if (this.data.show) {
       animation.translate('-9rem').step();
       this.setData({
-        animationData: animation.export()
+        animationData: animation.export(),
+        thisDH:e.currentTarget.dataset.id
       })
     } else {
       animation.translate('0rem').step();
       this.setData({
-        animationData: animation.export()
+        animationData: animation.export(),
       })
+      console.log(this.data.animationData);
     }
   },
   //下拉加载更多
@@ -106,7 +109,13 @@ Page({
           v.add_time = timeArr[1];
         }
       });
-      that.setData({ load: true, tip: '正在加载',personDynamic: that.data.personDynamic.concat(res)});
+      if (that.data.page == 1 && res.length<10){
+        that.setData({ load: false, tip: '目前没有了', personDynamic: that.data.personDynamic.concat(res) });
+      } else if (res.length < 10){
+        that.setData({ load: false, tip: '已经到底了', personDynamic: that.data.personDynamic.concat(res) });
+      } else {
+        that.setData({ load: true, tip: '正在加载', personDynamic: that.data.personDynamic.concat(res) });
+      }
       console.log({ 'personDynamic': that.data.personDynamic });
     },function(res){
       console.log({ '异常': res });
@@ -116,6 +125,10 @@ Page({
         that.setData({ load : false, tip: '暂无数据', personDynamic : res });
       }
     });
+  },
+  //删除当前动态
+  delDynamic(e){
+
   },
   /**
    * 生命周期函数--监听页面加载

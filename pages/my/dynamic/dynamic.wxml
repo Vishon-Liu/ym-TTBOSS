@@ -9,7 +9,7 @@
     <view class='box'>
       <view class='a'>
         <text style='color:#626F9C;font-weight:600;'>{{item.nickname}}</text>
-        <text style='color:#626F9C;font-size:.6rem'>转发</text>
+        <text bindtap='delDynamic' style='color:#626F9C;font-size:.6rem'>删除</text>
       </view>
       <!-- <view class='article' data-id='{{item.id}}' bindtap='toDetail'>
         <image src='/images/bosco1.jpg'></image>
@@ -24,7 +24,7 @@
         <text class='time'>{{item.add_time}}</text>
         <view class='info'>
           <view class='infoBox'>
-            <view animation="{{animationData}}">
+            <view animation="{{item.id==thisDH?animationData:''}}">
               <view bindtap='clickLike' data-id='{{item.id}}' data-isLike='{{item.is_like}}' class='zan'>
                 <icon class='iconfont icon-xin'></icon>
                 <text style='color:#fff;margin-left:.3rem;'>{{item.is_like? "取消":"赞"}}</text>
@@ -36,14 +36,14 @@
             </view>
           </view>
         </view>
-        <image src='/images/pl.png' bindtap='showPl'></image>
+        <image src='/images/pl.png' data-id='{{item.id}}' bindtap='showPl'></image>
       </view>
       <view wx:if='{{item.user_like.length!=0||item.commList.length!=0}}' class='ly'>
         <view wx:if='{{item.user_like.length!=0}}' class='like'>
           <icon class='iconfont .icon-xin'></icon>
           <text wx:for='{{item.user_like}}' wx:for-item="user_like">{{user_like}}</text>
         </view>
-        <view class='message' style='{{item.user_like.length!=0? "border-top: 1rpx solid #ccc;":"border-top: none"}}'>
+        <view class='message' style='{{item.user_like.length!=0 && item.commList.length!=0? "border-top: 1rpx solid #ccc;":"border-top: none"}}'>
           <view wx:for='{{item.commList}}' wx:for-item="commList">
             <text style='color: #626F9C; font-weight:600;'>{{commList.nickname}}: </text>
             <text>{{commList.msg}}</text>

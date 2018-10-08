@@ -13,14 +13,14 @@ Page({
     current:0,//照片墙当前指标数
     sessionid:'',
     disabled:false,//防止多次提交
-    //聚焦监听
+    //聚焦监听 
     'nickname': false, 
     'mail': false, 
-    'tel': false,
-    'wechat': false,
+    'tel': false, 
+    'wechat': false, 
     'welcome_speech': false, 
-    'job_title': false,
-    'intro': false
+    'job_title': false, 
+    'intro': false 
   }, 
   /**
    * 生命周期函数--监听页面加载

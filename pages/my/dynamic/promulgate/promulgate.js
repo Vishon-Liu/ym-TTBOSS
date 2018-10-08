@@ -15,22 +15,22 @@ Page({
   },
 
   //发布
-  promulgate(){
-    console.log({'msg':this.data.msg,'photo':this.data.photo});
-    var that = this;
-    var url = app.d.hostUrl + 'Dynamic/add';
-    var data = { 'content': that.data.msg, 'photo_wall':that.data.photo};
-    if (this.data.msg){
-      app.http(url, data, 'post', function (res) {
-        wx.navigateTo({
-          url: '../dynamic',
-        })
-      });
-      // return console.log('ojbk');
-    }else{
-      app.warn('写点想法吧');
-    }
-  },
+  // promulgate(){
+  //   console.log({'msg':this.data.msg,'photo':this.data.photo});
+  //   var that = this;
+  //   var url = app.d.hostUrl + 'Dynamic/add';
+  //   var data = { 'content': that.data.msg, 'photo_wall':that.data.photo};
+  //   if (this.data.msg){
+  //     app.http(url, data, 'post', function (res) {
+  //       wx.navigateTo({
+  //         url: '../dynamic',
+  //       })
+  //     });
+  //     // return console.log('ojbk');
+  //   }else{
+  //     app.warn('写点想法吧');
+  //   }
+  // },
   //获取输入内容
   bindInput(e){
     this.setData({msg:e.detail.value});
