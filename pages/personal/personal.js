@@ -53,7 +53,7 @@ Page({
           this.setData({[i]:true});
           this.setData({ disabled: false });
           return false;
-        }    
+        }
       }
     }
     //流程化接口

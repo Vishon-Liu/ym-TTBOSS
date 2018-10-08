@@ -8,7 +8,11 @@
   <textarea class='content' placeholder='这一刻的想法...' adjust-position='false' 
   auto-height maxlength='-1' bindinput="bindInput"></textarea>
   <view class='photo_wall'>
-    <image catchtap='showPhoto' wx:for='{{photo}}' wx:for-item='imgs' data-src="{{imgs}}" bindtap='preview' src='{{imgs}}' ></image>
+    <view bindlongtap='longTapShow' wx:for='{{photo}}' wx:for-item='imgs' class='photo'>
+      <image catchtap='showPhoto' data-src="{{imgs}}" 
+      bindtap='preview' src='{{imgs}}' ></image>
+      <i-icon wx:if='{{showDel}}' type='close' size='13' class='close' data-index="{{index}}" catchtap='delPhoto'></i-icon>
+    </view>
     <icon wx:if='{{photo.length<9}}' class='iconfont icon-tianjia' bindtap='pushPhoto'></icon>
   </view>
 </view>

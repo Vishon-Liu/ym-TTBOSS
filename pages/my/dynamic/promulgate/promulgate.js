@@ -6,9 +6,10 @@ Page({
    * 页面的初始数据
    */
   data: {
-    thumbWidth: 450,//压缩宽度
+    thumbWidth: 400,//压缩宽度
     thumbHeight: 0,//压缩高度
     current: 0,//照片当前指标数
+    showDel:false,//是否显示删除
     photo:[],
     msg:'',
   },
@@ -35,71 +36,76 @@ Page({
     this.setData({msg:e.detail.value});
   },
   //点击添加图片
-  pushPhoto(){
-    var that = this, max=9;
+  pushPhoto() {
+    var that = this, max = 9;
     max -= that.data.photo.length;
     wx.chooseImage({
       count: max,
       sizeType: ['compressed'],
-      success: function(res) {
+      success: function (res) {
         console.log({ '选择图片的返回数据': res });
-        res.tempFilePaths.forEach(v => {
-          console.log({'遍历每一张图':v});
-          that.compress(v, '450', false, function (res) {
-            that.setData({
-              photo: that.data.photo.concat(res.tempFilePath)
-            });
-          });
-        })
+        that.compress(0, 0, res.tempFilePaths);
       },
     })
   },
-  // 压缩图片
-  //file图片文件(必选)
-  //maxWidth限制宽度(必选)
-  //maxHeight限制高度(可选)
-  //callback压缩完成回调方法(可选)
-  compress(file, maxWidth, maxHeight, callback) {    //接收传过来的图片
+  compress(index, failNum, tempFilePaths){
     var that = this;
-    //获取原图片信息
-    wx.getImageInfo({
-      src: file,
-      success: function (res) {
-        var width = res.width, height = res.height;
-        if (width > maxWidth) {
-          //超出限制宽度
-          height = (maxWidth / width) * height;
-          width = parseInt(maxWidth);
+    console.log({ 'tempFilePaths': tempFilePaths});
+    if (index < tempFilePaths.length){
+      wx.getImageInfo({
+        src: tempFilePaths[index],
+        success:function(res){
+          console.log({ 'res': res });
+          var ratio = that.data.thumbWidth / res.width;     //ratio保存图片比例
+          console.log({ 'width': res.width, 'height': res.height, "ratio": ratio })
+          if (res.width > that.data.thumbWidth) {     //判断,如果原图的宽>所需图片宽度
+            that.setData({ thumbHeight: res.height * ratio }); //修改图片的高度
+          } else {                                                  //否则
+            that.setData({ thumbHeight: res.height, thumbWidth: res.width });
+          }
+          console.log({ 'width': that.data.thumbWidth, 'height': that.data.thumbHeight })
         }
-        if (res.height > maxHeight && maxHeight) {
-          //超出限制高度
-          var ratio = that.data.thumbHeight / res.height;//计算比例
-          width = (maxHeight / height) * width.toFixed(2);
-          height = maxHeight.toFixed(2);
-        }
-
-        that.setData({ thumbWidth: width, thumbHeight: height });
-
-        //按比例压缩图片
-        const ctx = wx.createCanvasContext('firstCanvas');
-        ctx.drawImage(file, 0, 0, width, height);
-        ctx.draw(false, function () {
-          //绘画完成回调
-          //生成图片
-          wx.canvasToTempFilePath({
-            canvasId: 'firstCanvas',
-            success: function (res) {
-              typeof callback == "function" && callback(res);
-            }
-          })
+      })
+      //按比例压缩图片
+      const ctx = wx.createCanvasContext('firstCanvas');
+      ctx.drawImage(tempFilePaths[index], 0, 0, that.data.thumbWidth, that.data.thumbHeight);
+      ctx.draw(false, function () {
+        index = index + 1;//上传成功的数量，上传成功则加1
+        wx.canvasToTempFilePath({
+          canvasId: 'firstCanvas',
+          success: function success(res) {
+            console.log({ 'resssss': res });
+            // typeof callback == "function" && callback(res);
+            that.setData({
+              photo: that.data.photo.concat(res.tempFilePath)
+            });
+            that.compress(index, failNum, tempFilePaths);
+          }
         });
-      }
-    })
+      });
+    };
+  },
+  //长按显示删除
+  longTapShow(){
+    this.setData({ showDel: !this.data.showDel});
+  },
+  //删除图片
+  delPhoto(e) {
+    console.log(e);
+    var photo = this.data.photo;
+    var index = e.currentTarget.dataset.index;
+    photo.splice(index, 1);
+    this.setData({
+      photo: photo,
+      current: 0,//不归0从前往后删除时会出现空白页
+    });
   },
   //预览照片墙
   showPhoto() {
+    console.log(this.data.photo);
     wx.previewImage({
       urls: this.data.photo,
+      current: 0
     })
   },
   /**
