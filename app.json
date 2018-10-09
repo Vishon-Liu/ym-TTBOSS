@@ -1,8 +1,8 @@
 {
   "pages":[
-    "pages/my/dynamic/dynamic",
-    "pages/default/default",
     
+    "pages/default/default",
+    "pages/my/dynamic/dynamic",
     "pages/my/dynamic/promulgate/promulgate",
     "pages/index/index",
     "pages/personal/personal",

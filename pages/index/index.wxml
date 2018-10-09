@@ -13,7 +13,7 @@
   <!-- 日期 -->
   <view style='margin:.5rem 1rem;' class='calendarModel'>
     <view class='line1'>
-      <text>七天内被查看的行为统计</text>
+      <text>{{currentDate}}</text>
       <icon bindtap='calendar' class='iconfont icon-rili'></icon>
     </view>
     <calendar wx:if='{{showCalendar}}' calendar-style="calendar" days-color="{{nowDateStyle}}" 

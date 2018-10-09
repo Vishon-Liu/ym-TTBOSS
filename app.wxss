@@ -11,11 +11,11 @@
 /* 字体图标 */
 @font-face {
   font-family: 'iconfont';  /* project id 799972 */
-  src: url('//at.alicdn.com/t/font_799972_206z26huzpx.eot');
-  src: url('//at.alicdn.com/t/font_799972_206z26huzpx.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_799972_206z26huzpx.woff') format('woff'),
-  url('//at.alicdn.com/t/font_799972_206z26huzpx.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_799972_206z26huzpx.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_799972_73rjceizgyk.eot');
+  src: url('//at.alicdn.com/t/font_799972_73rjceizgyk.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_799972_73rjceizgyk.woff') format('woff'),
+  url('//at.alicdn.com/t/font_799972_73rjceizgyk.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_799972_73rjceizgyk.svg#iconfont') format('svg');
 }
 
 .iconfont {
@@ -72,3 +72,7 @@
 .icon-shuangjiantouyou:before { content: "\e642"; }
 
 .icon-tianjia:before { content: "\e600"; }
+
+.icon-biaoqing-copy:before { content: "\e603"; }
+
+.icon-add:before { content: "\e602"; }

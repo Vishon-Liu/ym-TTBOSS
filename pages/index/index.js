@@ -49,6 +49,7 @@ Page({
     console.log(e);
     var day = e.detail.day, month = e.detail.month, year = e.detail.year;
     console.log(year+'-'+month+'-'+day);
+    that.setData({ currentDate: year + '-' + month + '-' + day});
     var date = year + '-' + month + '-' + day;
     that.setData({
       startTime: date,

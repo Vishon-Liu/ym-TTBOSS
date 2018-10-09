@@ -1,170 +1,199 @@
-// pages/message/detail/detail.js
-let col1H = 0;
-let col2H = 0;
+// pages/index/chat/chat.js
+// const app = getApp();
+const { emojis, emojiToPath, textToEmoji } = require('../../../utils/emojis');
+const inputHeight = 51;
+const emojiHeight = 171;
+const timeouts = [];
+let windowHeight;
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-    scrollH: 0,
-    imgWidth: 0,
-    loadingCount: 0,
-    images: [],
-    col1: [],
-    col2: [],
+    userInfo: {},
+    emojiList: [],
+    showEmojis: false,
+    showFiles: false,
+    sysInfo: {},
+    scrollHeight: '0',
+    scrollTop: 9999,
+    msg: '',
+    chatList: [],
   },
-
-  onImageLoad: function (e) {
-    console.log({'魔鬼':e});
-    let imageId = e.currentTarget.id;
-    let oImgW = e.detail.width;         //图片原始宽度
-    let oImgH = e.detail.height;        //图片原始高度
-    let imgWidth = this.data.imgWidth;  //图片设置的宽度
-    let scale = imgWidth / oImgW;       //比例计算
-    let imgHeight = oImgH * scale;      //自适应高度
-    let images = this.data.images;
-    let imageObj = null;
-
-    for (let i = 0; i < images.length; i++) {
-      let img = images[i];
-      if (img.id === imageId) {
-        imageObj = img;
-        break;
+  onLoad: function () {
+    // 获取用户信息
+    // app.getUserInfo(userInfo => {
+    //   this.setData({ userInfo })
+    // });
+    // 获取表情包
+    const emojiList = Object.keys(emojis).map(key => ({
+      key: key,
+      img: emojiToPath(key)
+    }))
+    // 获取屏幕高度信息
+    const sysInfo = wx.getSystemInfoSync()
+    windowHeight = sysInfo.windowHeight
+    const scrollHeight = `${windowHeight - inputHeight}px`
+    // 获取缓存中聊天记录
+    // const chatList = (wx.getStorageSync('chatList') || []).map(chat=>{
+    //   if (chat.msg_type === 'text') {
+    //     chat.text_list = textToEmoji(chat.msg_text)
+    //   }
+    //   return chat
+    // })
+    const chatList = (wx.getStorageSync('chatList') || [])
+    // 更新状态
+    this.setData({
+      emojiList,
+      sysInfo,
+      scrollHeight,
+      chatList,
+    })
+  },
+  onUnload: function () {
+    // 清除定时器
+    timeouts.forEach(item => {
+      clearTimeout(item)
+    })
+  },
+  // 滚动聊天
+  goBottom: function (n = 0) {
+    timeouts.push(setTimeout(() => {
+      this.setData({
+        scrollTop: 9999
+      })
+    }, n))
+  },
+  // 隐藏表情选择框
+  hideEmojis: function () {
+    this.setData({ showEmojis: false });
+  },
+  // 隐藏或显示表情选择框
+  toggleEmojis: function () {
+    const { showEmojis, showFiles } = this.data;
+    if (showFiles) {
+      this.setData({
+        showEmojis: true,
+        showFiles: false
+      });
+    } else {
+      if (showEmojis) {
+        this.setData({
+          scrollHeight: `${windowHeight - inputHeight}px`,
+          showEmojis: !showEmojis
+        })
+      } else {
+        this.setData({
+          scrollHeight: `${windowHeight - inputHeight - emojiHeight}px`,
+          showEmojis: !showEmojis
+        });
+        this.goBottom(50);
       }
     }
-
-    imageObj.height = imgHeight;
-
-    let loadingCount = this.data.loadingCount - 1;
-    let col1 = this.data.col1;
-    let col2 = this.data.col2;
-
-    if (col1H <= col2H) {
-      col1H += imgHeight;
-      col1.push(imageObj);
+  },
+  // 隐藏或显示图片选择框
+  toggleFiles: function () {
+    const { showEmojis, showFiles } = this.data;
+    if (showEmojis) {
+      this.setData({
+        showEmojis: false,
+        showFiles: true
+      });
     } else {
-      col2H += imgHeight;
-      col2.push(imageObj);
-    }
-
-    let data = {
-      loadingCount: loadingCount,
-      col1: col1,
-      col2: col2
-    };
-
-    if (!loadingCount) {
-      data.images = [];
-    }
-
-    this.setData(data);
-  },
-
-  loadImages: function () {
-    let images = [
-      { id: 0, height: 0, img: 'http://f11.baidu.com/it/u=719139831,2246033258&fm=72' },
-      { id: 1, height: 0, img: 'http://img4.imgtn.bdimg.com/it/u=4249246503,3141065561&fm=11&gp=0.jpg' },
-      { id: 2, height: 0, img: 'http://img2.imgtn.bdimg.com/it/u=1223109412,647033122&fm=27&gp=0.jpg' },
-      { id: 3, height: 0, img: 'http://img4.imgtn.bdimg.com/it/u=2470782786,1683926908&fm=27&gp=0.jpg' },
-      { id: 4, height: 0, img: 'http://img2.imgtn.bdimg.com/it/u=1563309201,3922557567&fm=27&gp=0.jpg' },
-      { id: 5, height: 0, img: 'http://img0.imgtn.bdimg.com/it/u=2057230170,2141935860&fm=27&gp=0.jpg' },
-      { id: 6, height: 0, img: 'http://img2.imgtn.bdimg.com/it/u=699073474,2982786718&fm=27&gp=0.jpg' },
-      { id: 7, height: 0, img: 'http://img3.imgtn.bdimg.com/it/u=2632216144,811862651&fm=27&gp=0.jpg' },
-      { id: 8, height: 0, img: 'http://img0.imgtn.bdimg.com/it/u=2654089843,29884835&fm=26&gp=0.jpg' },
-      { id: 9, height: 0, img: 'http://img3.imgtn.bdimg.com/it/u=1054654278,3762715981&fm=26&gp=0.jpg' },
-      { id: 10, height: 0, img: 'http://img0.imgtn.bdimg.com/it/u=1652542152,496608834&fm=26&gp=0.jpg' },
-      { id: 11, height: 0, img: 'http://img4.imgtn.bdimg.com/it/u=341757615,2406244729&fm=26&gp=0.jpg' },
-      { id: 12, height: 0, img: 'http://a.hiphotos.baidu.com/baike/pic/item/562c11dfa9ec8a139b8d4b9ffe03918fa0ecc03e.jpg' },
-      { id: 13, height: 0, img: 'http://img2.imgtn.bdimg.com/it/u=2924288851,433941127&fm=26&gp=0.jpg' },
-      { id: 14, height: 0, img: 'http://img1.imgtn.bdimg.com/it/u=2131168962,676329409&fm=26&gp=0.jpg' },
-      { id: 15, height: 0, img: 'http://img3.imgtn.bdimg.com/it/u=3485778575,840024704&fm=11&gp=0.jpg' },
-      { id: 16, height: 0, img: 'http://img2.imgtn.bdimg.com/it/u=4086623963,1635066061&fm=26&gp=0.jpg' },
-      { id: 17, height: 0, img: 'http://img4.imgtn.bdimg.com/it/u=3821825896,2042206750&fm=26&gp=0.jpg' },
-      { id: 18, height: 0, img: 'http://img4.imgtn.bdimg.com/it/u=760956803,1429751009&fm=26&gp=0.jpg' },
-      { id: 19, height: 0, img: 'http://img0.imgtn.bdimg.com/it/u=1338034049,1603812949&fm=26&gp=0.jpg' },
-    ];
-
-    let baseId = "img-" + (+new Date());
-    // console.log({ 'baseId': baseId})
-
-    for (let i = 0; i < images.length; i++) {
-      images[i].id = baseId + "-" + i;
-    }
-
-    this.setData({
-      loadingCount: images.length,
-      images: images
-    });
-  },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    wx.getSystemInfo({
-      success: (res) => {
-        let ww = res.windowWidth;
-        let wh = res.windowHeight;
-        let imgWidth = ww * 0.48;
-        let scrollH = wh;
-        
+      if (showFiles) {
         this.setData({
-          scrollH: scrollH,
-          imgWidth: imgWidth
+          scrollHeight: `${windowHeight - inputHeight}px`,
+          showFiles: !showFiles
+        })
+      } else {
+        this.setData({
+          scrollHeight: `${windowHeight - inputHeight - emojiHeight}px`,
+          showFiles: !showFiles
         });
+        this.goBottom(50);
+      }
+    }
+  },
+  inputFocus: function () {
+    const { showEmojis, showFiles } = this.data;
+    if (showEmojis || showFiles) {
+      this.setData({
+        scrollHeight: `${windowHeight - inputHeight}px`,
+        showEmojis: false,
+        showFiles: false,
+      });
+    }
+  },
+  inputMsg: function (e) {
+    //
+  },
+  blurInput: function (e) {
+    this.setData({
+      msg: e.detail.value
+    })
+  },
+  // 点击滚动框
+  scrollClick: function () {
+    const { showEmojis, showFiles } = this.data;
+    if (showEmojis || showFiles) {
+      this.setData({
+        scrollHeight: `${windowHeight - inputHeight}px`,
+        showEmojis: false,
+        showFiles: false,
+      });
+    }
+  },
+  // 点击表情
+  clickEmoji: function (e) {
+    const { key } = e.currentTarget.dataset;
+    const { msg } = this.data;
+    this.setData({ msg: msg + key });
+  },
+  // 发送信息
+  sendMsg: function (e) {
+    const { msg, chatList } = this.data
+    if (!msg) {
+      return
+    }
+    const newChatList = [...chatList, {
+      msg_type: 'text',
+      msg_text: msg,
+      text_list: textToEmoji(msg)
+    }]
+    this.setData({
+      chatList: newChatList,
+      msg: ''
+    })
+    wx.setStorageSync('chatList', newChatList);
+    this.goBottom(500);
+  },
+  // 发送图片
+  sendPic: function (e) {
+    const that = this
+    const { chatList } = this.data
 
-        this.loadImages();
+    wx.chooseImage({
+      count: 1,
+      success: function (res) {
+        const src = res.tempFilePaths[0]
+        wx.getImageInfo({
+          src,
+          success: function (res) {
+            const { width, height } = res
+            const newChatList = [...chatList, {
+              msg_type: 'image',
+              msg_image: { src, width, height }
+            }]
+            that.setData({ chatList: newChatList })
+            wx.setStorageSync('chatList', newChatList);
+            that.goBottom(500);
+          }
+        })
       }
     })
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
+  // 预览图片
+  previewImage: function (e) {
+    wx.previewImage({
+      urls: [e.currentTarget.id]
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
-  }
 })

@@ -7,27 +7,33 @@ Page({
   data: {
     time:0,
   },
+
+  toDetail(){
+    wx.navigateTo({
+      url: 'detail/detail',
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var that = this;
-    var timestamp = Date.parse(new Date());
-    var lastTime = 1531806085;
-    timestamp = timestamp / 1000;
-    console.log("当前时间戳为：" + timestamp);
-    timestamp = timestamp - lastTime;
-    console.log("当前时间戳为：" + timestamp);
-    switch (timestamp) {
-      case timestamp<36000:
-        that.setData({time:"一小时前"});
-        break;
-      case timestamp > 36000 && timestamp<864000:
-        that.setData({ time: "昨天" });
-        break;
-      default:
-        that.setData({ time: "不知道多久" });
-    }
+    // var that = this;
+    // var timestamp = Date.parse(new Date());
+    // var lastTime = 1531806085;
+    // timestamp = timestamp / 1000;
+    // console.log("当前时间戳为：" + timestamp);
+    // timestamp = timestamp - lastTime;
+    // console.log("当前时间戳为：" + timestamp);
+    // switch (timestamp) {
+    //   case timestamp<36000:
+    //     that.setData({time:"一小时前"});
+    //     break;
+    //   case timestamp > 36000 && timestamp<864000:
+    //     that.setData({ time: "昨天" });
+    //     break;
+    //   default:
+    //     that.setData({ time: "不知道多久" });
+    // }
   },
 
   /**
@@ -57,21 +63,6 @@ Page({
   onUnload: function () {
   
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
   /**
    * 用户点击右上角分享
    */

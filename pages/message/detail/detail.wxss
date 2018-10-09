@@ -1,17 +1,247 @@
-/* pages/message/detail/detail.wxss */
-/* .falls{
+/* pages/index/chat/chat.wxss */
+page{
+  background: #EBEBEB;
+}
+.chat{
+  width: 100%;
+  max-height: 85vh;
+  padding: 0 .5rem;
+  box-sizing: border-box;
+}
+/* 聊天时间 */
+.msgTime{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-size: .8rem;
+  color: #fff;
+  margin: .5rem 0;
+}
+.msgTime text{
+  background: #C1C1C1;
+  padding: .2rem;
+  box-sizing: border-box;
+  border-radius: .2rem;
+}
+/* 右方信息框 */
+.myMsg{
+  float: right;
+  display: flex;
+  justify-content: flex-end;
+  max-width: 85%;
+  /* background: palegoldenrod; */
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+}
+/* 左方信息框 */
+.otherMsg{
+  float: left;
+  display: flex;
+  justify-content: flex-start;
+  max-width: 85%;
+  /* background: palevioletred; */
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+}
+/* 右方聊天框 */
+.myInfo{
+  display: flex;
+  align-items: center;
+  max-width: 75%;
+  font-size: 1rem;
+  padding: .4rem;
+  margin-right: 1rem;
+  box-sizing: border-box;
+  background: palegreen;
+  border-radius:.3rem;
+  position: relative;
+}
+/* 左方聊天框 */
+.otherInfo{
+  display: flex;
+  align-items: center;
+  max-width: 75%;
+  font-size: 1rem;
+  padding: .4rem;
+  margin-left: 1rem;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius:.3rem;
+  position: relative;
+}
+/* 咨询框结构样式 */
+.advisory{
+  display: flex;
+  flex-flow: column nowrap;
+  /* background: papayawhip; */
+}
+/* 标题 */
+.advisory .title{
+  padding-bottom: .4rem;
+  border-bottom: 1px solid #C1C1C1;
+  box-sizing: border-box;
+  margin-bottom: .4rem;
+}
+/* 产品 */
+.product{
+  display: flex;
+}
+.pic{
+  width: 4rem;
+  height: 4rem;
+  background: #fff;
+  margin-right: .4rem;
+}
+.price{
+  width: 60%;
+  max-height: 4rem;
+  display: flex;
+  flex-flow: column nowrap;
+  font-size: .8rem;
+  overflow: hidden;
+}
+/* 控制文字显示 */
+.ellipsis{
+  display: -webkit-box;
+  font-size:.8rem;
+  line-height: 40rpx;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp:2;
+  overflow: hidden;
+  text-overflow:ellipsis;
+}
+/* 图片 */
+.photo{
+  max-width: 8rem;
+  border-radius: .3rem;
+}
+/* 聊天框的尖角 */
+.myInfo::before{
+  content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-left: 8px solid palegreen;
+    position: absolute;
+    top: 15px;
+    right: -16px;
+}
+.otherInfo::before{
+  content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-right: 8px solid #fff;
+    position: absolute;
+    top: 15px;
+    left: -16px;
+}
+/* 头像 */
+.avatar{
+  min-width: 3rem;
+  max-width: 3rem;
+  height: 3rem;
+}
+/* 底部输入框 */
+.input{
+  position: fixed;
+  bottom: 0%;
+  right: 0%;
+  width: 100%;
+  min-height: 10vh;
+  background: #FAFAFA;
+  padding: .5rem;
+  box-sizing: border-box;
+}
+.input .default{
+  padding: .5rem 0;
+  font-size: .7rem;
+  color: #8B8B8B;
+}
+.input .default text:not(:first-child){
+  padding: .2rem .6rem;
+  border: 1rpx solid #D9D9D9;
+  border-radius: 1rem;
+  margin-left: .5rem;
+  font-size: .6rem;
+}
+.input .typing{
+  display: flex;
+  align-items: center;
+}
+.input .typing textarea{
+  width: 70%;
+  min-height:2rem;
+  max-height: 5rem;
+  background: #fff;
+  color: #575757;
+  border-radius: 4px;
+  padding: 0 .5rem;
+  font-size: .8rem;
+  border: 1rpx solid #D9D9D9;
+}
+.input .typing view{
+  width: 30%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.input .typing icon{
+  display: flex;
+  font-size: 1.5rem;
+  color: #828991;
+}
+.input .typing .send{
+  padding: .3rem .5rem;
+  font-size: .8rem;
+  color: #fff;
+  background: #1AAD19;
+  border-radius: .2rem;
+}
+/* 表情框 */
+.emoji-box{
+  width: 100%;
+  height: 30vh;
+  background: papayawhip;
+  margin-top:.5rem;
+}
+.emojis_box {
+  background: #fff;
+  border-top: 1px solid #ccc;
+  height: 150px;
+  width: 100%;
+  /* padding: 10px 25rpx; */
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-between;
+  align-content: flex-start;
+  box-sizing: border-box;
 }
-.falls image{
-  width: 48%;
-  margin-bottom:.5rem; 
-  vertical-align: top;
-} */
-.img_item {
-  width: 48%;
-  margin: 1%;
-  display: inline-block;
-  vertical-align: top;
+
+.emoji_wrap {
+  flex: 0 0 100rpx;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emoji {
+  width: 28px;
+  height: 28px;
+}
+.emoji_wrap .emoji {
+  padding: 5px;
+}
+
+.emoji_send {
+  color: #fff;
+  background: #1aad19;
+  border-radius: 5px;
+  font-size: 9pt;
+  width: 100%;
+  text-align: center;
+  padding: 5px 0;
 }
