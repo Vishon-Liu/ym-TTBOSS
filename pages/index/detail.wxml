@@ -3,21 +3,21 @@
 <scroll-view style='height:100vh' lower-threshold='50' bindscrolltolower='nextPage' scroll-y class='page'>
   <view style='margin:.5rem 1rem;' class='calendarModel' enable-back-to-top>
     <view class='line1'>
-      <text>七天内被查看的行为统计</text>
+      <text bindtap='resetDate'>{{reset?'重置':''}}</text>
       <icon bindtap='calendar' class='iconfont icon-rili'></icon>
     </view>
     <calendar wx:if='{{showCalendar}}' calendar-style="calendar" days-color="{{nowDateStyle}}" 
     weeks-type='cn' active-type='rounded' binddayClick="dayClick" bindnextMonth="monitorMonth" 
     bindprevMonth="monitorMonth"/>
   </view>
-  <view class='line2'>共 4 次</view>
+  <!-- <view class='line2'>共 4 次</view> -->
   <view wx:for='{{behavior}}' data-id='{{item.id}}' class='info'>
     <view class='i2'>
       <view class='time'>{{item.add_time}}</view>
       <view class='behavior'>
         <image src='{{item.photo}}' mode='aspectFill'></image>
         <view>
-          <text>{{item.nickname}}</text>
+          <text>{{item.nickname}}</text><text style='color:#000;font-size:1rem;'> {{behaviorType}}</text>
         </view>
       </view>
     </view>

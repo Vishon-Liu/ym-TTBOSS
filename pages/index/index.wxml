@@ -11,7 +11,7 @@
     </view>
   </view>
   <!-- 日期 -->
-  <view style='margin:.5rem 1rem;' class='calendarModel'>
+  <!-- <view style='margin:.5rem 1rem;' class='calendarModel'>
     <view class='line1'>
       <text>{{currentDate}}</text>
       <icon bindtap='calendar' class='iconfont icon-rili'></icon>
@@ -19,82 +19,91 @@
     <calendar wx:if='{{showCalendar}}' calendar-style="calendar" days-color="{{nowDateStyle}}" 
     weeks-type='cn' active-type='rounded' binddayClick="dayClick" bindnextMonth="monitorMonth" 
     bindprevMonth="monitorMonth"/>
-  </view>
+  </view> -->
   <!-- 对应选项页 -->
   <view class='swiper-box'>
     <!-- 第一页 -->
-    <view style='padding:.5rem 1rem;' class="swiper-items" hidden="{{current!='0'}}">
+    <view style='padding:0rem 1rem .5rem 1rem;' class="swiper-items" hidden="{{current!='0'}}">
+      <view style='margin:.5rem 1rem;' class='calendarModel'>
+        <view class='line1'>
+          <text>{{currentDate}}</text>
+          <icon bindtap='calendar' class='iconfont icon-rili'></icon>
+        </view>
+        <calendar wx:if='{{showCalendar}}' calendar-style="calendar" days-color="{{nowDateStyle}}" 
+        weeks-type='cn' active-type='rounded' binddayClick="dayClick" bindnextMonth="monitorMonth" 
+        bindprevMonth="monitorMonth"/>
+      </view>
       <view class='line2'>
-        <view data-type='5' data-check='查看商品' bindtap='jump'>
+        <view data-type='5' data-check='查看商品' data-behavior='查看了你的商品' bindtap='jump'>
           <icon class='iconfont icon-shangpin'></icon>
           <view class='sp'>
             <text>咨询商品</text>
-            <text>{{behavior[5]}}</text>
+            <text>{{behavior[5]||0}}</text>
           </view>
         </view>
-        <view data-type='1' data-check='查看官网' bindtap='jump'>
+        <view data-type='1' data-check='查看官网' data-behavior='查看了你的官网' bindtap='jump'>
           <icon class='iconfont icon-icon-test'></icon>
           <view class='sp'>
             <text>查看官网</text>
-            <text>{{behavior[1]}}</text>
+            <text>{{behavior[1]||0}}</text>
           </view>
         </view>
-        <view data-type='2' data-check='复制微信' bindtap='jump'>
+        <view data-type='2' data-check='复制微信' data-behavior='复制了你的微信' bindtap='jump'>
           <icon class='iconfont icon-weixin'></icon>
           <view class='sp'>
             <text>复制微信</text>
-            <text>{{behavior[2]}}</text>
+            <text>{{behavior[2]||0}}</text>
           </view>
         </view>
-        <view data-type='3' data-check='转发名片' bindtap='jump'>
+        <view data-type='3' data-check='转发名片' data-behavior='转发了你的名片' bindtap='jump'>
           <icon class='iconfont icon-icon--'></icon>
           <view class='sp'>
             <text>转发名片</text>
-            <text>{{behavior[3]}}</text>
+            <text>{{behavior[3]||0}}</text>
           </view>
         </view>
       </view>
       <view class='line3'>
-        <view data-type='4' data-check='查看名片' bindtap='jump' class='list'>
+        <view data-type='4' data-check='查看名片' data-behavior='查看了你的名片' bindtap='jump' class='list'>
           <icon class='iconfont icon-yj'></icon>
           <view class='list_info'>
             <text>查看名片</text>
-            <text>{{behavior[4]}}</text>
+            <text>{{behavior[4]||0}}</text>
           </view>
         </view>
-        <view data-type='6' data-check='点击喜欢' bindtap='jump' class='list'>
+        <view data-type='6' data-check='点击喜欢' data-behavior='点击了喜欢' bindtap='jump' class='list'>
           <icon class='iconfont icon-zan1'></icon>
           <view class='list_info'>
             <text>点击喜欢</text>
-            <text>{{behavior[6]}}</text>
+            <text>{{behavior[6]||0}}</text>
           </view>
         </view>
-        <view data-type='7' data-check='拨打电话' bindtap='jump' class='list'>
+        <view data-type='7' data-check='拨打电话' data-behavior='拨打了你的电话' bindtap='jump' class='list'>
           <icon class='iconfont icon-lvyouzixun'></icon>
           <view class='list_info'>
             <text>拨打电话</text>
-            <text>{{behavior[7]}}</text>
+            <text>{{behavior[7]||0}}</text>
           </view>
         </view>
-        <view data-type='8' data-check='查看动态' bindtap='jump' class='list'>
+        <view data-type='8' data-check='查看动态' data-behavior='查看了你的动态' bindtap='jump' class='list'>
           <icon class='iconfont icon-pengyouquan'></icon>
           <view class='list_info'>
             <text>查看动态</text>
-            <text>{{behavior[8]}}</text>
+            <text>{{behavior[8]||0}}</text>
           </view>
         </view>
-        <view  data-type='9' data-check='保存电话' bindtap='jump' class='list'>
+        <view  data-type='9' data-check='保存电话' data-behavior='保存了你的电话' bindtap='jump' class='list'>
           <icon class='iconfont icon-dianhua'></icon>
           <view class='list_info'>
             <text>保存电话</text>
-            <text>{{behavior[9]}}</text>
+            <text>{{behavior[9]||0}}</text>
           </view>
         </view>
       </view>
     </view>
     <!-- 第二页 -->
     <view class="swiper-items" hidden="{{current!='1'}}">
-      <view class='line4'>
+      <view class='line4' style='margin-top:1rem;'>
         <view wx:for='{{client}}' bindtap='jump' class='list2' data-id='{{item.id}}'>
           <image src='{{item.photo}}' mode='aspectFill'></image>
           <view>{{item.nickname}}</view>

@@ -11,7 +11,9 @@ Page({
     'type':'',
     behavior:[],
     page:1,
+    behaviorType:'',
     load:true,
+    reset:false,
     startTime: '',
     showCalendar: false,
     nowDateStyle: [{ month: 'current', day: new Date().getDate(), color: 'white', background: '#AAD4F5' }],
@@ -19,11 +21,21 @@ Page({
   },
   // 打开日历
   calendar() {
-    this.setData({ murky: !this.data.murky, showCalendar: !this.data.showCalendar });
+    this.setData({ 
+      murky: !this.data.murky, 
+      showCalendar: !this.data.showCalendar ,
+      reset:true
+    });
+  },
+  resetDate(){
+    var that = this;
+    that.setData({ startTime: '', nowDateStyle: [{ month: 'current', day: new Date().getDate(), color: 'white', background: '#AAD4F5' }]});
+    that.behaviorQuery();
+    that.close();
   },
   // 关闭日历
   close() {
-    this.setData({ murky: true, showCalendar: false });
+    this.setData({ murky: true, showCalendar: false, reset:false});
   },
   // 监听点击日历上下个月的事件
   monitorMonth(e) {
@@ -49,6 +61,7 @@ Page({
     console.log(year + '-' + month + '-' + day);
     var date = year + '-' + month + '-' + day;
     that.setData({
+      behavior:[],
       startTime: date,
       page:1,
     });
@@ -61,7 +74,8 @@ Page({
       });
     } else {
       that.setData({
-        nowDateStyle: [].concat({ month: 'current', day: day, color: 'white', background: '#FF72A6' })
+        nowDateStyle: [{ month: 'current', day: new Date().getDate(), color: 'white', background: '#AAD4F5' }]
+          .concat({ month: month, day: day, color: 'white', background: '#FF72A6' })
       });
     }
     that.behaviorQuery();
@@ -74,13 +88,20 @@ Page({
     app.http(url, { 'type': that.data.type, 'page': that.data.page, 'startTime': that.data.startTime},
     'get',function(res){
       console.log(res);
-      that.setData({
-        tip: '玩命加载...',
-        behavior: that.data.behavior.concat(res)
-      });
+      if (that.data.page == 1 && res.length < 10) {
+        that.setData({ load: false, tip: '目前没有了', behavior: that.data.behavior.concat(res) });
+      } else if (res.length < 10) {
+        that.setData({ load: false, tip: '已经到底了', behavior: that.data.behavior.concat(res) });
+      } else {
+        that.setData({ load: true, tip: '正在加载', behavior: that.data.behavior.concat(res) });
+      }
+      console.log({ 'behavior': that.data.behavior });
+      // that.setData({
+      //   tip: '玩命加载...',
+      //   behavior: that.data.behavior.concat(res)
+      // });
     },function(res){
-      console.log('code')
-      console.log(res);
+      console.log({ '异常': res });
       if (that.data.page > 1){
         that.setData({ load: false, tip: '已经没有了', behavior: that.data.behavior.concat(res) });
       }else{
@@ -91,19 +112,21 @@ Page({
   // 加载下一页
   nextPage(e){
     var that = this;
+    console.log({ '加载更多': e });
     if (that.data.load){
       that.setData({ page: that.data.page + 1 });
     }
-    console.log(that.data.page);
-    that.behaviorQuery(that.data.type);
+    if (that.data.page!=1){
+      that.behaviorQuery();
+    }
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     var that = this;
-    console.log(options);
-    that.setData({ title: options.title, type: options.type});
+    console.log({ 'options': options});
+    that.setData({ title: options.title, 'type': options.type, behaviorType: options.behaviorType});
     //改变顶部标题
     wx.setNavigationBarTitle({
       title: options.title,
