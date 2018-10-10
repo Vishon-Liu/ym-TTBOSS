@@ -2,6 +2,8 @@
   "navigationBarTitleText": "个人动态",
   "usingComponents": {
     "i-load-more": "/dist/load-more/index",
-    "calendar": "plugin://calendar/calendar"
+    "calendar": "plugin://calendar/calendar",
+    "i-modal": "/dist/modal/index",
+    "i-message": "/dist/message/index"
   }
 }

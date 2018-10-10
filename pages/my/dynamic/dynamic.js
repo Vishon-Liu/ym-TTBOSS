@@ -1,4 +1,5 @@
 // pages/my/dynamic/dynamic.js
+const { $Message } = require('../../../dist/base/index');
 const app = getApp();
 Page({
 
@@ -10,10 +11,22 @@ Page({
     thisDH:'',
     show: false,
     tip: '',
+    showDelModal:false,
     load: true,
     murky: true,
     personDynamic: [],
     animationData: {},
+    delID:'',
+    actions: [
+      {
+        name: '取消'
+      },
+      {
+        name: '删除',
+        color: '#ed3f14',
+        loading: false
+      }
+    ]
   },
 
   //跳发布页
@@ -126,9 +139,41 @@ Page({
       }
     });
   },
-  //删除当前动态
-  delDynamic(e){
+  //删除模态框
+  delModal(e){
+    this.setData({ showDelModal: true, delID: e.currentTarget.dataset.id});
+  },
+  //动态删除 确认
+  delDynamic({ detail }) {
+    var that = this;
+    if (detail.index === 0) {
+      this.setData({
+        showDelModal: false
+      });
+    } else {
+      const action = [...this.data.actions];
+      action[1].loading = true;
+      for (var i = 0; i < that.data.personDynamic.length; i++) {
+        if (that.data.delID == that.data.personDynamic[i].id) {
+          that.data.personDynamic.splice(i, 1);
+          console.log({'id': that.data.delID});
+          app.http(app.d.hostUrl + 'Dynamic/del', { id: that.data.delID }, 'post');
+          that.setData({ personDynamic: that.data.personDynamic, actions: action});
+        }
+      }
 
+      setTimeout(() => {
+        action[1].loading = false;
+        this.setData({
+          showDelModal: false,
+          actions: action
+        });
+        $Message({
+          content: '删除成功！',
+          type: 'success'
+        });
+      }, 500);
+    }
   },
   /**
    * 生命周期函数--监听页面加载

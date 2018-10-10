@@ -1,4 +1,5 @@
 <!--pages/my/dynamic/dynamic.wxml-->
+<i-message id="message" />
 <view hidden='{{murky}}' bindtap='close' class='murky' id='murky'></view>
 <view class='promulgate'>
   <icon bindtap='promulgate' class='iconfont icon-pengyouquan'></icon>
@@ -9,8 +10,11 @@
     <view class='box'>
       <view class='a'>
         <text style='color:#626F9C;font-weight:600;'>{{item.nickname}}</text>
-        <text bindtap='delDynamic' style='color:#626F9C;font-size:.6rem'>删除</text>
+        <text bindtap='delModal' data-id='{{item.id}}' style='color:#626F9C;font-size:.6rem'>删除</text>
       </view>
+      <i-modal title="删除确认" visible="{{ showDelModal }}" actions="{{ actions }}" bind:click="delDynamic">
+        <view>删除后无法恢复</view>
+      </i-modal>
       <!-- <view class='article' data-id='{{item.id}}' bindtap='toDetail'>
         <image src='/images/bosco1.jpg'></image>
         <text>{{item.details}}</text>
