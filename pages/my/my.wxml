@@ -16,8 +16,8 @@
         <text>名片海报</text>
       </view>
       <view>
-        <icon class='iconfont icon-shezhi'></icon>
-        <icon class='iconfont icon-arrow-right'></icon>
+        <icon bindtap='toSetting' class='iconfont icon-shezhi'></icon>
+        <!-- <icon class='iconfont icon-arrow-right'></icon> -->
       </view>
     </view>
   </view>

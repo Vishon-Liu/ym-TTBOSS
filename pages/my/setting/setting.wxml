@@ -1,13 +1,15 @@
 <!--pages/my/setting/setting.wxml-->
 <view class='page'>
   <view class='list'>
-    <view class='l1' bindtap='setVia'>
+    <view class='line' bindtap='setVia'>
       <text>头像</text>
       <view>
         <image mode='aspectFill' src='/images/bosco1.jpg'></image>
-        <icon class='iconfont icon-arrow-right'></icon>
       </view>
     </view>
-    <view>阿斯蒂芬</view>
+    <view class='line'>
+      <text>名字</text>
+      <input class='nickname' type='text' value='阿斯蒂芬'></input>
+    </view>
   </view>
 </view>
