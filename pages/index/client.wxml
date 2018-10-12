@@ -20,7 +20,7 @@
 <scroll-view style='height:100vh' lower-threshold='50' bindscrolltolower='nextPage' scroll-y class='page'>
   <view style='margin:.5rem 1rem;' class='calendarModel' enable-back-to-top>
     <view class='line1'>
-      <text bindtap='resetDate'>{{reset?'重置':''}}</text>
+      <text bindtap='resetDate'>{{reset?'重置':startTime}}</text>
       <icon bindtap='calendar' class='iconfont icon-rili'></icon>
     </view>
     <calendar wx:if='{{showCalendar}}' calendar-style="calendar" days-color="{{nowDateStyle}}" 

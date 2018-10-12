@@ -48,6 +48,7 @@ Page({
       },
     })
   },
+  //压缩图片
   compress(index, failNum, tempFilePaths){
     var that = this;
     console.log({ 'tempFilePaths': tempFilePaths});

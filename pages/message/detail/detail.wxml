@@ -127,7 +127,7 @@
       <text>保存名片码</text>
     </view> -->
     <view class='typing'>
-      <textarea adjust-position maxlength='-1' fixed='{{true}}'
+      <textarea adjust-position maxlength='500' fixed='{{true}}' cursor-spacing='12'
        auto-height show-confirm-bar='{{false}}' bindinput='getVal' value='{{msg}}'></textarea>
       <view>
         <icon class='iconfont icon-biaoqing-copy' bindtap='toggleEmojis'></icon>

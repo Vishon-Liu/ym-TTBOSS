@@ -9,6 +9,10 @@ App({
     sessionid:'',//通信ID
     companyInfo:false,//公司信息
     token:'',//二维码token
+    loginInfo:{//登录用户的基本信息
+      id:83,
+      nickname:'123'
+    },
   },  
   onLaunch: function (options) { 
     //保存扫二维码进入场景的token

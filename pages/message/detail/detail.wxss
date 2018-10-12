@@ -211,7 +211,7 @@ page{
 .emojis_box {
   background: #fff;
   border-top: 1px solid #ccc;
-  height: 150px;
+  height: 250px;
   width: 100%;
   /* padding: 10px 25rpx; */
   display: flex;

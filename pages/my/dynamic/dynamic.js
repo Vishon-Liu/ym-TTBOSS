@@ -82,28 +82,41 @@ Page({
   },
   // 点赞
   clickLike(e) {
+    var index = e.currentTarget.dataset.index;
+    this.data.personDynamic[index]['showLike'] = !this.data.personDynamic[index]['showLike']
+    console.log({ '对了': e, '阿萨德': this.data.personDynamic[index]['showLike'] });
+    var personDynamic = this.data.personDynamic;
+    var id = app.globalData.loginInfo.id;
     console.log({ '点赞': e });
-    if (e.currentTarget.dataset.islike == 1) {
-      var url = app.d.hostUrl + 'Dynamic/noLike',
-        data = { 'id': e.currentTarget.dataset.id };
-      app.http(url, data, 'post');
-    } else {
-      var url = app.d.hostUrl + 'Dynamic/like',
-        data = { 'id': e.currentTarget.dataset.id };
-      app.http(url, data, 'post');
+    console.log({"用户id":app.globalData.loginInfo});
+    if (personDynamic[index]['user_like'][id]){
+      console.log({'已点赞': personDynamic[index]['user_like'][id]});
+      delete personDynamic[index]['user_like'][id];
+      personDynamic[index].is_like=0;
+      app.http(app.d.hostUrl + 'Dynamic/noLike', { id: personDynamic[index].id }, 'post');
+      this.setData({ personDynamic: personDynamic})
+    }else{
+      console.log({'没点赞': personDynamic[index]})
+      //对象数组     [下标]     [属性]       { [对象属性] :对象值}
+      personDynamic[index]['user_like']={ [id] : personDynamic[index].nickname};
+      console.log({ 'now': personDynamic[index] });
+      personDynamic[index].is_like = 1;//先本地修改点赞状态
+      app.http(app.d.hostUrl + 'Dynamic/like', { id: e.currentTarget.dataset.id }, 'post');//再将状态发给服务器
+      this.setData({ personDynamic: personDynamic})
     }
   },
   // 评论留言
   clickMsg(e){
-    console.log(e);
+    console.log({"评论键盘升起":e});
   },
   // 动态请求
   dynamicsRequest() {
     var that = this;
     var url = app.d.hostUrl + 'Dynamic/person',
-      data = { page: that.data.page };
+        data = { page: that.data.page };
     app.http(url, data, 'get', function (res) {
       console.log({ '动态列表': res });
+      //遍历数据列表 更改列表里的一项属性值(时间的显示)
       res.forEach(v => {    //改变时间显示方式
         var timeArr = v.add_time.split(" ");
         // console.log({ '时间数组': timeArr});
@@ -122,15 +135,21 @@ Page({
           v.add_time = timeArr[1];
         }
       });
-      if (that.data.page == 1 && res.length<10){
+      //判断数据量 然后根据数据量控制页底的显示与提示
+      if (that.data.page == 1 && res.length<10){ 
         that.setData({ load: false, tip: '目前没有了', personDynamic: that.data.personDynamic.concat(res) });
       } else if (res.length < 10){
         that.setData({ load: false, tip: '已经到底了', personDynamic: that.data.personDynamic.concat(res) });
       } else {
         that.setData({ load: true, tip: '正在加载', personDynamic: that.data.personDynamic.concat(res) });
       }
+      //给动态列表 添加一个属性 该属性用于控制页面是否显示点赞栏
+      that.data.personDynamic.forEach(v=>{
+        v['showLike'] = Object.keys(v.user_like).length !== 0;
+      });
+      that.setData({ personDynamic: that.data.personDynamic });
       console.log({ 'personDynamic': that.data.personDynamic });
-    },function(res){
+    },function(res){//查不到数据的函数 提示异常
       console.log({ '异常': res });
       if (that.data.page > 1) {
         that.setData({ load: false, tip: '已经没有了', personDynamic: that.data.personDynamic.concat(res) });

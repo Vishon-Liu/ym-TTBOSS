@@ -15,10 +15,6 @@
       <i-modal title="删除确认" visible="{{ showDelModal }}" actions="{{ actions }}" bind:click="delDynamic">
         <view>删除后无法恢复</view>
       </i-modal>
-      <!-- <view class='article' data-id='{{item.id}}' bindtap='toDetail'>
-        <image src='/images/bosco1.jpg'></image>
-        <text>{{item.details}}</text>
-      </view> -->
       <view class='t'>{{item.details}}</view>
       <view class='{{ item.imgs.length==1? "p" : item.imgs.length==4? "f" : "m" }}'>
         <image wx:for='{{item.imgs}}' wx:for-item='imgs' data-src="{{imgs}}" bindtap='preview' src='{{imgs}}' 
@@ -29,7 +25,8 @@
         <view class='info'>
           <view class='infoBox'>
             <view animation="{{item.id==thisDH?animationData:''}}">
-              <view bindtap='clickLike' data-id='{{item.id}}' data-isLike='{{item.is_like}}' class='zan'>
+              <view bindtap='clickLike' data-id='{{item.id}}' data-isLike='{{item.is_like}}' 
+              data-index="{{index}}" class='zan'>
                 <icon class='iconfont icon-xin'></icon>
                 <text style='color:#fff;margin-left:.3rem;'>{{item.is_like? "取消":"赞"}}</text>
               </view>
@@ -42,22 +39,20 @@
         </view>
         <image src='/images/pl.png' data-id='{{item.id}}' bindtap='showPl'></image>
       </view>
-      <view wx:if='{{item.user_like.length!=0||item.commList.length!=0}}' class='ly'>
-        <view wx:if='{{item.user_like.length!=0}}' class='like'>
+      <view wx:if='{{item.showLike||item.commList.length!=0}}' class='ly'>
+        <view wx:if='{{item.showLike}}' class='like'>
           <icon class='iconfont .icon-xin'></icon>
           <text wx:for='{{item.user_like}}' wx:for-item="user_like">{{user_like}}</text>
         </view>
-        <view class='message' style='{{item.user_like.length!=0 && item.commList.length!=0? "border-top: 1rpx solid #ccc;":"border-top: none"}}'>
+        <view class='message' 
+        style='{{item.showLike && item.commList.length!=0? "border-top: 1rpx solid #ccc;":"border-top: none"}}'>
           <view wx:for='{{item.commList}}' wx:for-item="commList">
             <text style='color: #626F9C; font-weight:600;'>{{commList.nickname}}: </text>
             <text>{{commList.msg}}</text>
           </view>
-          <!-- <view>
-            <text>Bosco</text>回复
-            <text>阿萨德: </text>阿士大夫撒旦法撒旦飞洒地方撒旦
-          </view> -->
         </view>
       </view>
+
     </view>
   </view>
   <i-load-more tip='{{tip}}' loading="{{ load }}"/>
