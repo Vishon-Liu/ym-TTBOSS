@@ -104,7 +104,7 @@
     <!-- 第二页 -->
     <view class="swiper-items" hidden="{{current!='1'}}">
       <view class='line4' style='margin-top:1rem;'>
-        <view wx:for='{{client}}' bindtap='jump' class='list2' data-id='{{item.id}}'>
+        <view wx:for='{{client}}' bindtap='jump' class='list2' wx:key='{{this}}' data-id='{{item.id}}'>
           <image src='{{item.photo}}' mode='aspectFill'></image>
           <view>{{item.nickname}}</view>
         </view>

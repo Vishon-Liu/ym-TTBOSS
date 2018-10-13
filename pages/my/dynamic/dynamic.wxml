@@ -5,7 +5,7 @@
   <icon bindtap='promulgate' class='iconfont icon-pengyouquan'></icon>
 </view>
 <scroll-view style='height:100vh' lower-threshold='50' bindscrolltolower='loadMore' scroll-y class='page'>
-  <view wx:for='{{personDynamic}}' class='dynamic'>
+  <view wx:for='{{personDynamic}}' wx:key='{{this}}' class='dynamic'>
     <image src='{{item.photo}}'></image>
     <view class='box'>
       <view class='a'>
@@ -17,7 +17,7 @@
       </i-modal>
       <view class='t'>{{item.details}}</view>
       <view class='{{ item.imgs.length==1? "p" : item.imgs.length==4? "f" : "m" }}'>
-        <image wx:for='{{item.imgs}}' wx:for-item='imgs' data-src="{{imgs}}" bindtap='preview' src='{{imgs}}' 
+        <image wx:for='{{item.imgs}}' wx:key='{{this}}' wx:for-item='imgs' data-src="{{imgs}}" bindtap='preview' src='{{imgs}}' 
         mode='{{imgs.length==1?"aspectFill":"aspectFill"}}'></image>
       </view>
       <view class='pl'>
@@ -42,11 +42,11 @@
       <view wx:if='{{item.showLike||item.commList.length!=0}}' class='ly'>
         <view wx:if='{{item.showLike}}' class='like'>
           <icon class='iconfont .icon-xin'></icon>
-          <text wx:for='{{item.user_like}}' wx:for-item="user_like">{{user_like}}</text>
+          <text wx:for='{{item.user_like}}' wx:key='{{this}}' wx:for-item="user_like">{{user_like}}</text>
         </view>
         <view class='message' 
         style='{{item.showLike && item.commList.length!=0? "border-top: 1rpx solid #ccc;":"border-top: none"}}'>
-          <view wx:for='{{item.commList}}' wx:for-item="commList">
+          <view wx:for='{{item.commList}}' wx:key='{{this}}' wx:for-item="commList">
             <text style='color: #626F9C; font-weight:600;'>{{commList.nickname}}: </text>
             <text>{{commList.msg}}</text>
           </view>
