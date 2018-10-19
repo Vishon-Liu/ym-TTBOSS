@@ -1,7 +1,6 @@
 // pages/default/default.js
 var app=getApp();
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -14,26 +13,44 @@ Page({
    */
   onLoad: function (options) { 
     var that=this;
+    //尝试获取缓存的登录信息
     wx.getStorage({
-      key:'sessionid',
+      key:'loginInfo',
       success:function(res){
-        var sessionid = res.data;
-        wx.request({
-          url: app.d.hostUrl +'UserBehavior/checkToken',
-          data: { 'sessionid': sessionid},
-          success:function(res){
-            if(res.data.code==200){
-              that.getUserInfo();
-              app.globalData.sessionid = sessionid;
-              wx.switchTab({ url: '/pages/index/index' });
-            }else{
-              that.promiseLogin();
-            }
-          }
-        })
+        //获取缓存成功
+        var loginInfo = res.data;
+        //判断缓存是否已超时
+        if (loginInfo.valid_time > new Date().getTime()){
+          app.globalData.loginInfo = res.data;
+          wx.switchTab({ url: '/pages/index/index' });
+        }else{
+          that.userBasicInfo();
+        }    
       },
       fail: function () {
-        that.promiseLogin();
+        that.userBasicInfo();
+      }
+    })
+  },
+  //获取用户基本信息
+  userBasicInfo:function(){
+    var that=this;
+    //检测是否已授权用户基本信息
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting['scope.userInfo']) {
+          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
+          wx.getUserInfo({
+            success: res => {
+              app.globalData.userInfo = res.userInfo;
+              that.promiseLogin();
+            }
+          })
+          console.log('授权');
+        } else {
+          this.setData({ 'login': false });
+          console.log('未授权')
+        }
       }
     })
   },
@@ -42,20 +59,15 @@ Page({
     var that = this;  
     wx.showLoading({ title: '登录中' });
     //获取用户基本信息
-    that.getUserInfo().then(function (res) {
-      console.log(res);
-      //检测是否授权
-      if (res) return that.login();//已授权，执行登录接口
-      //未授权显示授权窗口
-      that.setData({ login: false })
-      return false;
-    }).then(function (res) {
+    that.login().then(function (res) {
       wx.hideLoading();
       //根据返回值做操作
       if (res.code == 200) {
         //登录成功跳转，缓存和全局变量写入通信ID，跳转首页
-        app.globalData.sessionid = res.data;
-        wx.setStorage({ key: 'sessionid', data: res.data });
+        app.globalData.loginInfo = res.data;
+        //设置有效时间为20小时
+        res.data.valid_time = new Date().getTime() + 72000000;
+        wx.setStorage({ key: 'loginInfo', data: res.data });
         wx.switchTab({ url: '/pages/index/index' });
       } else if (res.code == 210) {
         //获取关联凭证，跳转关联页面
@@ -65,6 +77,8 @@ Page({
       }
     }).catch(function (res) {
       wx.hideLoading();
+      //未成功执行以上场景，所以是未受邀用户，显示未受邀窗口
+      that.setData({ login: true })
       console.log(res)
     });
   },
@@ -75,57 +89,13 @@ Page({
     if (this.data.disabled)return false;
     this.setData({ disabled: true });
     if (e.detail.iv) {  
-      wx.showLoading({ title: '登录中' });
       //授权成功,从登录接口开始执行
       app.globalData.userInfo = e.detail.userInfo;
-      that.login().then(function (res) {
-        //根据返回值做操作
-        if (res.code == 200) {
-          wx.hideLoading();
-          //登录成功跳转，缓存和全局变量写入通信ID，跳转首页
-          app.globalData.sessionid = res.data;
-          wx.setStorage({ key: 'sessionid', data: res.data });
-          wx.switchTab({ url: '/pages/index/index' });
-        } else if (res.code == 210) {
-          //获取关联凭证，跳转关联页面
-          wx.redirectTo({
-            url: '/pages/personal/personal?sessionid=' + res.data,
-          })
-        } else {
-          //未成功执行以上场景，所以是未受邀用户，显示未受邀窗口
-          that.setData({ login: true })
-        }
-      }).catch(function (res) {
-        wx.hideLoading();
-        //未成功执行以上场景，所以是未受邀用户，显示未受邀窗口
-        that.setData({ login: true })
-        console.log(res)
-      });
+      that.promiseLogin();
     }else{
       //拒绝授权
       this.setData({ disabled:false});
     }
-  },
-  //获取用户信息
-  getUserInfo: function () {
-    return new Promise(function (resolve, reject) {
-      wx.getSetting({
-        success: res => {
-          //检测用户是否授权基本信息
-          if (res.authSetting['scope.userInfo']) {
-            // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-            wx.getUserInfo({
-              success: res => {
-                app.globalData.userInfo = res.userInfo;
-                resolve(true);
-              }
-            })
-          } else {
-            resolve(false);
-          }
-        }
-      })
-    })
   },
   //用户登录
   login: function () {

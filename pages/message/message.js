@@ -1,4 +1,5 @@
 // pages/message/message.js
+var app=getApp();
 Page({
 
   /**
@@ -6,6 +7,7 @@ Page({
    */
   data: {
     time:0,
+    list:[],
   },
 
   toDetail(){
@@ -17,6 +19,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    this.userRecord();
     // var that = this;
     // var timestamp = Date.parse(new Date());
     // var lastTime = 1531806085;
@@ -35,38 +38,19 @@ Page({
     //     that.setData({ time: "不知道多久" });
     // }
   },
+  //查询用户消息记录
+  userRecord:function(){
+    this.setData({'list':1})
+    console.log(this.data)
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
+    var that=this;
+    var url = app.d.hostUrl +'User/relevanceUser';
+    app.http(url,[],'get',function(res){
+      console.log(res);
+      that.setData({
+        'list':res
+      })
+    })
   }
+  
 })

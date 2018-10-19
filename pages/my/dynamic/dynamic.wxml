@@ -6,10 +6,10 @@
 </view>
 <scroll-view style='height:100vh' lower-threshold='50' bindscrolltolower='loadMore' scroll-y class='page'>
   <view wx:for='{{personDynamic}}' wx:key='{{this}}' class='dynamic'>
-    <image src='{{item.photo}}'></image>
+    <image src='{{loginInfo.photo}}'></image>
     <view class='box'>
       <view class='a'>
-        <text style='color:#626F9C;font-weight:600;'>{{item.nickname}}</text>
+        <text style='color:#626F9C;font-weight:600;'>{{loginInfo.nickname}}</text>
         <text bindtap='delModal' data-id='{{item.id}}' style='color:#626F9C;font-size:.6rem'>删除</text>
       </view>
       <i-modal title="删除确认" visible="{{ showDelModal }}" actions="{{ actions }}" bind:click="delDynamic">
@@ -25,10 +25,15 @@
         <view class='info'>
           <view class='infoBox'>
             <view animation="{{item.id==thisDH?animationData:''}}">
-              <view bindtap='clickLike' data-id='{{item.id}}' data-isLike='{{item.is_like}}' 
-              data-index="{{index}}" class='zan'>
+              <view bindtap='noLike' data-index='{{index}}' class='zan'
+               wx:if="{{item.is_like}}">
                 <icon class='iconfont icon-xin'></icon>
-                <text style='color:#fff;margin-left:.3rem;'>{{item.is_like? "取消":"赞"}}</text>
+                <text style='color:#fff;margin-left:.3rem;'>取消</text>
+              </view>
+              <view bindtap='clickLike' data-index='{{index}}'
+               class='zan' wx:else>
+                <icon class='iconfont icon-xin'></icon>
+                <text style='color:#fff;margin-left:.3rem;'>点赞</text>
               </view>
               <view bindtap='clickMsg' class='zan'>
                 <icon class='iconfont icon-pinglun'></icon>
@@ -42,7 +47,7 @@
       <view wx:if='{{item.showLike||item.commList.length!=0}}' class='ly'>
         <view wx:if='{{item.showLike}}' class='like'>
           <icon class='iconfont .icon-xin'></icon>
-          <text wx:for='{{item.user_like}}' wx:key='{{this}}' wx:for-item="user_like">{{user_like}}</text>
+          <text wx:for='{{item.user_like}}' wx:key='{{this}}' wx:for-item="user_like">{{user_like}},</text>
         </view>
         <view class='message' 
         style='{{item.showLike && item.commList.length!=0? "border-top: 1rpx solid #ccc;":"border-top: none"}}'>

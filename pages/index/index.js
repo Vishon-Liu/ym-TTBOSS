@@ -115,7 +115,7 @@ Page({
    */
   onLoad: function (options) {
     var that = this;
-    console.log({'app.globalData': app.globalData})
+    console.log(app.globalData.loginInfo)
     //例
     // var url = app.d.hostUrl +'UserBehavior/checkToken';
     // app.http(url,[],'get',function(res){

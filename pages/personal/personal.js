@@ -27,6 +27,11 @@ Page({
    */
   onLoad: function (options) {
     this.setData({sessionid:options.sessionid});
+    // var tempFilePaths = ["http://tmp/wx21962e3a2e011576.o6zAJs4mvf3tup-7eETI7zPOM_co.JBA5hhTDVL1465fc53e785b17ad414cd68d32c703f56.png",
+    //   "http://tmp/wx21962e3a2e011576.o6zAJs4mvf3tup-7eETI7zPOM_co.q8VuKzatMCAXa22f902614e38a1489b1464c6f3e0282.jpg"
+    // ];
+    // console.log(tempFilePaths);
+    // this.recursionImg(0, tempFilePaths.length - 1, tempFilePaths);
   },
   //关联公司
   relevanceCompany:function(e){
@@ -69,7 +74,7 @@ Page({
     }).then(function(res){
       wx.hideLoading();
       if (res.code == 200) {
-        app.globalData.sessionid=res.data;
+        app.globalData.loginInfo=res.data;
         app.tishi(res.msg, function (res) {
           wx.switchTab({ url: '/pages/index/index'})
         });
@@ -178,15 +183,41 @@ Page({
       sizeType: ['compressed'],
       success: function (res) {
         var tempFilePaths = res.tempFilePaths;
-        for (var i = 0; i < tempFilePaths.length; i++) {
-          that.compress(tempFilePaths[i],'450',false, function (res) {
-            that.setData({
-              bannerImg: that.data.bannerImg.concat(res.tempFilePath)
-            });
-          });
-        }
+        //  var tempFilePaths =[        "http://tmp/wx21962e3a2e011576.o6zAJs4mvf3tup-7eETI7zPOM_co.JBA5hhTDVL1465fc53e785b17ad414cd68d32c703f56.png",
+        //    "http://tmp/wx21962e3a2e011576.o6zAJs4mvf3tup-7eETI7zPOM_co.q8VuKzatMCAXa22f902614e38a1489b1464c6f3e0282.jpg"
+        //  ];
+        console.log(tempFilePaths);
+        that.recursionImg(0, tempFilePaths.length-1, tempFilePaths);
+          // that.setData({
+          //   bannerImg: that.data.bannerImg.concat(tempFilePaths)
+          // });
+        //console.log(that.data.bannerImg)
+        // for (var i = 0; i < tempFilePaths.length; i++) {
+        //   that.compress(tempFilePaths[i],'450',false, function (res) {
+        //     // console.log(i);
+        //     // console.log(res)
+        //     that.setData({
+        //       bannerImg: that.data.bannerImg.concat(res.tempFilePath)
+        //     });
+        //   });
+        // }
       },
     })
+  },
+  //递归压缩图片
+  recursionImg: function (curr,cnt, tempFilePaths){
+   
+    var that=this;
+    this.compress(tempFilePaths[curr], 400, false,function(res){
+      console.log(curr);
+      if (curr < cnt) that.recursionImg(++curr, cnt, tempFilePaths);
+      that.setData({
+        bannerImg: that.data.bannerImg.concat(res.tempFilePath)
+      },function(){
+        if (curr < cnt) that.recursionImg(++curr, cnt, tempFilePaths);
+      });
+      
+    } );
   },
   //删除图片
   delPhoto(e) {
@@ -205,10 +236,13 @@ Page({
   //callback压缩完成回调方法(可选)
   compress(file,maxWidth,maxHeight,callback) {    //接收传过来的图片
     var that=this;
+    console.log('开始压缩')
+    console.log(file);
     //获取原图片信息
     wx.getImageInfo({
       src: file,
       success: function (res) {
+        console.log('压缩图片基本信息');
         var width=res.width,height=res.height;
         if(width>maxWidth){
           //超出限制宽度
@@ -227,13 +261,19 @@ Page({
         //按比例压缩图片
         const ctx = wx.createCanvasContext('firstCanvas');
         ctx.drawImage(file, 0, 0, width, height);
-        ctx.draw(false, function () {     
+        
+        ctx.draw(false, function () {    
+          console.log('生成压缩图片', width, height, ctx) ;
           //绘画完成回调
           //生成图片
           wx.canvasToTempFilePath({
             canvasId: 'firstCanvas',
             success: function (res) {
-              typeof callback == "function" && callback(res);
+              console.log('压缩完成:'+res);
+
+              typeof callback == "function" && callback(res);           
+            },fail(res){
+              console.log('失败:'+res)
             }
           })
         });

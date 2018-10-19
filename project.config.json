@@ -33,13 +33,20 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": 1,
 			"list": [
 				{
 					"id": 0,
 					"name": "token",
 					"pathName": "pages/default/default",
-					"query": "token=52b3e2MjU3PT0nLxgYCFRzHBJyMHkmMTwAUHl+Dmks",
+					"query": "token=d13c41MjU3PT0nLxgYCAIjHUZyNHB3NDVWAnh5CzUs",
+					"scene": "1011"
+				},
+				{
+					"id": -1,
+					"name": "token",
+					"pathName": "pages/index/index",
+					"query": "scene=d13c41MjU3PT0nLxgYCAIjHUZyNHB3NDVWAnh5CzUs",
 					"scene": "1011"
 				}
 			]

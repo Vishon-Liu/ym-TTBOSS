@@ -1,11 +1,11 @@
 // pages/dynamic/dynamic.js
 const app = getApp();
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
+    loginInfo:'',
     page:1,
     thisDH: '',
     show:false,
@@ -14,6 +14,15 @@ Page({
     murky: true,
     companyDynamic:[],
     animationData:{},
+  },
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
+    this.setData({
+      'loginInfo': app.globalData.loginInfo,
+    })
+    this.dynamicsRequest();  
   },
   //评论收起
   close() {
@@ -62,28 +71,36 @@ Page({
   },
   // 点赞
   clickLike(e) {
+    var id = this.data.loginInfo['id'];
+    var nickname=this.data.loginInfo['nickname'];
     var index = e.currentTarget.dataset.index;
-    this.data.companyDynamic[index]['showLike'] = !this.data.companyDynamic[index]['showLike']
-    console.log({ '对了': e, '阿萨德': this.data.companyDynamic[index]['showLike'] });
     var companyDynamic = this.data.companyDynamic;
-    var id = app.globalData.loginInfo.id;
-    console.log({ '点赞': e });
-    console.log({ "用户id": app.globalData.loginInfo });
-    if (companyDynamic[index]['user_like'][id]) {
-      console.log({ '已点赞': companyDynamic[index]['user_like'][id] });
-      delete companyDynamic[index]['user_like'][id];
-      companyDynamic[index].is_like = 0;
-      app.http(app.d.hostUrl + 'Dynamic/noLike', { id: companyDynamic[index].id }, 'post');
-      this.setData({ companyDynamic: companyDynamic })
-    } else {
-      console.log({ '没点赞': companyDynamic[index] })
-      //对象数组     [下标]     [属性]       { [对象属性] :对象值}
-      companyDynamic[index]['user_like'] = { [id]: app.globalData.loginInfo.nickname };
-      console.log({ 'now': companyDynamic[index] });
-      companyDynamic[index].is_like = 1;//先本地修改点赞状态
-      app.http(app.d.hostUrl + 'Dynamic/like', { id: e.currentTarget.dataset.id }, 'post');//再将状态发给服务器
-      this.setData({ companyDynamic: companyDynamic })
+    companyDynamic[index]['is_like'] = 1;
+    if (companyDynamic[index]['user_like'].length == undefined){
+      companyDynamic[index]['user_like'][id] = nickname;
+    }else{
+      companyDynamic[index]['user_like'] = { [id]: nickname} ;
     }
+    companyDynamic[index]['showLike'] = true;
+    var data = { id: companyDynamic[index].id }
+    app.http(app.d.hostUrl + 'Dynamic/like', data, 'post');
+    this.setData({ companyDynamic: companyDynamic });
+  },
+  //取消点赞
+  noLike(e){
+    var id = this.data.loginInfo['id'];
+    var index = e.currentTarget.dataset.index;
+    var companyDynamic = this.data.companyDynamic;
+    companyDynamic[index]['is_like']=0;
+    delete companyDynamic[index]['user_like'][id];
+    var showLike=false;
+    for (var i in companyDynamic[index]['user_like']){
+      showLike=true;break;
+    }
+    companyDynamic[index]['showLike'] = showLike;
+    var data = { id: companyDynamic[index].id }
+    app.http(app.d.hostUrl + 'Dynamic/noLike',data , 'post');
+    this.setData({ companyDynamic: companyDynamic });
   },
   // 评论
   clickMsg(e){
@@ -138,11 +155,5 @@ Page({
       }
     });
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    var that = this;
-    that.dynamicsRequest();
-  }
+  
 })
