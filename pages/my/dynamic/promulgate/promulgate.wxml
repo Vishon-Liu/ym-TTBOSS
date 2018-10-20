@@ -1,18 +1,23 @@
 <!--pages/my/dynamic/promulgate/promulgate.wxml-->
 <canvas style="width: {{thumbWidth}}px; height: {{thumbHeight}}px;border:1px solid black;position: absolute; left: -1000px; top:-1000px;" canvas-id="firstCanvas"></canvas>
-<view class='promulgate'>
-  <text>取消</text>
-  <text bindtap='promulgate' style='color:rgb(75, 205, 63);'>发布</text>
-</view>
-<view class='page'>
-  <textarea class='content' placeholder='这一刻的想法...' adjust-position='false' 
-  auto-height maxlength='-1' bindinput="bindInput"></textarea>
-  <view class='photo_wall'>
-    <view bindlongtap='longTapShow' wx:for='{{photo}}' wx:key='{{this}}' wx:for-item='imgs' class='photo'>
-      <image catchtap='showPhoto' data-src="{{imgs}}" 
-      bindtap='preview' src='{{imgs}}' ></image>
-      <i-icon wx:if='{{showDel}}' type='close' size='13' class='close' data-index="{{index}}" catchtap='delPhoto'></i-icon>
-    </view>
-    <icon wx:if='{{photo.length<9}}' class='iconfont icon-tianjia' bindtap='pushPhoto'></icon>
+<form' bindsubmit="postDynamic">
+  <view class='promulgate'>
+    <text bindtap="cancel">取消</text>
+    <button style='color:rgb(75, 205, 63);' formType="submit" disabled="{{disabled}}">
+    发布</button>
+    <!-- <text bindtap='promulgate' style='color:rgb(75, 205, 63);'>发布</text> -->
   </view>
-</view>
+  <view class='page'>
+    <textarea class='content' placeholder='这一刻的想法...' adjust-position='false' 
+    auto-height maxlength='500' name="content"></textarea>
+    <view class='photo_wall'>
+      <view bindlongtap='longTapShow' wx:for='{{photo}}' wx:key='{{this}}' wx:for-item='imgs' class='photo'>
+        <image catchtap='showPhoto' data-src="{{imgs}}" 
+        bindtap='preview' src='{{imgs}}' ></image>
+        <i-icon wx:if='{{showDel}}' type='close' size='13' class='close' data-index="{{index}}" catchtap='delPhoto'></i-icon>
+      </view>
+      <icon wx:if='{{photo.length<9}}' class='iconfont icon-tianjia' bindtap='pushPhoto'></icon>
+    </view>
+  </view>
+</form>
+

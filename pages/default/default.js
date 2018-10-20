@@ -46,10 +46,8 @@ Page({
               that.promiseLogin();
             }
           })
-          console.log('授权');
         } else {
           this.setData({ 'login': false });
-          console.log('未授权')
         }
       }
     })
@@ -74,12 +72,13 @@ Page({
         wx.redirectTo({
           url: '/pages/personal/personal?sessionid=' + res.data,
         })
+      }else{
+        this.setData({ 'login': true });
       }
     }).catch(function (res) {
       wx.hideLoading();
       //未成功执行以上场景，所以是未受邀用户，显示未受邀窗口
       that.setData({ login: true })
-      console.log(res)
     });
   },
   //请求用户授权
@@ -104,6 +103,7 @@ Page({
         success: res => {
           var data = app.globalData.userInfo;
           data.token = app.globalData.token;
+          data.moveToke=app.globalData.moveToke;
           data.code = res.code;
           wx.request({
             method: 'post',

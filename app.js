@@ -3,20 +3,30 @@ App({
   //配置
   d: {
     hostUrl: 'http://push.com/bossapi/', //请求的主域名
+    serverName:'http://push.com',//域名
   },
   globalData: {
     userInfo: false,//用户的基本信息
     sessionid:'',//通信ID
     companyInfo:false,//公司信息
-    token:'',//二维码token
+    token:'',//受邀凭证
+    moveToke: '',//用户转移凭证
     //登录用户的基本信息
-    loginInfo:{},
+    loginInfo:{
+      sessionid
+        :
+        "1F5f4QWNPj0-hHg0Es2Gg6Axi4plO9LrEpfWSK1p751u9KijouNCOzl5pCrwCAU3"
+    },
   },  
   onLaunch: function (options) { 
     console.log(options)
     //保存扫二维码进入场景的token
     if (options.scene == 1011 && options.query.token){
       this.globalData.token = options.query.token;
+    }
+    //保存扫二维码进入场景的用户转移token
+    if (options.scene == 1011 && options.query.move) {
+      this.globalData.moveToke = options.query.move;
     }
     // 打开调试
     wx.setEnableDebug({
@@ -30,7 +40,6 @@ App({
   //参数4:成功回调函数(函数名为error时为失败回调函数,可选)
   //参数5:失败回调函数(可选)
   http: function () {
-    console.log(this.globalData.loginInfo)
     var that = this;
     var thAM=arguments;
     var data = thAM[1];

@@ -12,25 +12,14 @@ Page({
     showDel:false,//是否显示删除
     photo:[],
     msg:'',
+    disabled: false,//防止多次提交
   },
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
 
-  //发布
-  // promulgate(){
-  //   console.log({'msg':this.data.msg,'photo':this.data.photo});
-  //   var that = this;
-  //   var url = app.d.hostUrl + 'Dynamic/add';
-  //   var data = { 'content': that.data.msg, 'photo_wall':that.data.photo};
-  //   if (this.data.msg){
-  //     app.http(url, data, 'post', function (res) {
-  //       wx.navigateTo({
-  //         url: '../dynamic',
-  //       })
-  //     });
-  //     // return console.log('ojbk');
-  //   }else{
-  //     app.warn('写点想法吧');
-  //   }
-  // },
+  },
   //获取输入内容
   bindInput(e){
     this.setData({msg:e.detail.value});
@@ -44,47 +33,68 @@ Page({
       sizeType: ['compressed'],
       success: function (res) {
         console.log({ '选择图片的返回数据': res });
-        that.compress(0, 0, res.tempFilePaths);
+        var tempFilePaths = res.tempFilePaths;
+        that.recursionImg(0, tempFilePaths.length - 1, tempFilePaths);
       },
     })
   },
-  //压缩图片
-  compress(index, failNum, tempFilePaths){
+  //递归压缩多张图片
+  recursionImg: function (curr, cnt, tempFilePaths) {
     var that = this;
-    console.log({ 'tempFilePaths': tempFilePaths});
-    if (index < tempFilePaths.length){
-      wx.getImageInfo({
-        src: tempFilePaths[index],
-        success:function(res){
-          console.log({ 'res': res });
-          var ratio = that.data.thumbWidth / res.width;     //ratio保存图片比例
-          console.log({ 'width': res.width, 'height': res.height, "ratio": ratio })
-          if (res.width > that.data.thumbWidth) {     //判断,如果原图的宽>所需图片宽度
-            that.setData({ thumbHeight: res.height * ratio }); //修改图片的高度
-          } else {                                                  //否则
-            that.setData({ thumbHeight: res.height, thumbWidth: res.width });
-          }
-          console.log({ 'width': that.data.thumbWidth, 'height': that.data.thumbHeight })
+    wx.showLoading({ title: '上传中' });
+    this.compress(tempFilePaths[curr], 450, 750, function (res) {
+      console.log(curr);
+      that.setData({
+        photo: that.data.photo.concat(res.tempFilePath)
+      }, function () {
+        if (curr < cnt) {
+          that.recursionImg(++curr, cnt, tempFilePaths);
+        } else {
+          wx.hideLoading();
         }
-      })
-      //按比例压缩图片
-      const ctx = wx.createCanvasContext('firstCanvas');
-      ctx.drawImage(tempFilePaths[index], 0, 0, that.data.thumbWidth, that.data.thumbHeight);
-      ctx.draw(false, function () {
-        index = index + 1;//上传成功的数量，上传成功则加1
-        wx.canvasToTempFilePath({
-          canvasId: 'firstCanvas',
-          success: function success(res) {
-            console.log({ 'resssss': res });
-            // typeof callback == "function" && callback(res);
-            that.setData({
-              photo: that.data.photo.concat(res.tempFilePath)
-            });
-            that.compress(index, failNum, tempFilePaths);
-          }
-        });
       });
-    };
+    });
+  },
+  // 压缩图片
+  compress(file, maxWidth, maxHeight, callback) {
+    var that = this;
+    //获取原图片信息
+    wx.getImageInfo({
+      src: file,
+      success: function (res) {
+        var width = res.width, height = res.height;
+        if (width > maxWidth) {
+          //超出限制宽度
+          height = (maxWidth / width) * height;
+          width = parseInt(maxWidth);
+        }
+        if (height > maxHeight && maxHeight) {
+          //超出限制高度
+          var ratio = that.data.thumbHeight / res.height;//计算比例
+          width = (maxHeight / height) * width.toFixed(2);
+          height = maxHeight.toFixed(2);
+        }
+        //设置比例压缩的高宽
+        that.setData({ thumbWidth: width, thumbHeight: height });
+        //延迟绘画
+        setTimeout(function () {
+          var ctx = wx.createCanvasContext('firstCanvas');
+          ctx.drawImage(file, 0, 0, width, height);
+          ctx.draw(false, function () {
+            //绘画完成回调,生成图片
+            wx.canvasToTempFilePath({
+              canvasId: 'firstCanvas',
+              success: function (res) {
+                typeof callback == "function" && callback(res);
+              }, fail(res) {
+                console.log('失败:')
+                console.log(res);
+              }
+            })
+          });
+        }, 100)
+      }
+    })
   },
   //长按显示删除
   longTapShow(){
@@ -102,17 +112,77 @@ Page({
     });
   },
   //预览照片墙
-  showPhoto() {
-    console.log(this.data.photo);
+  showPhoto(e) {
     wx.previewImage({
+      current: e.currentTarget.dataset.src,
       urls: this.data.photo,
-      current: 0
     })
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
+  //发布动态
+  postDynamic:function(e){
+    this.setData({ disabled: true });
+    var that = this, data = e.detail.value;
+    if (!data.content){
+      app.warn('动态不能为空');
+      this.setData({ disabled: false });
+      return false;
+    }
+    //流程化接口
+    wx.showLoading({ title: '提交中' });
+    this.uploadPhoto().then(function (res) {
+      data.photo_wall = res;//设置照片墙参数
+      var url = app.d.hostUrl +'/Dynamic/add';
+      wx.hideLoading();
+      app.http(url,data,'post',function(res){
+        wx.hideLoading();
+        wx.redirectTo({ 'url':'/pages/my/dynamic/dynamic'});
+      })    
+    }).catch(function (res) {
+      wx.hideLoading();
+    }) 
+  },
+  //上传照片墙
+  uploadPhoto: function () {
+    var photo_wall = [], that = this;
+    var photo = this.data.photo;
+    var photoCnt = photo.length;
+    return new Promise(function (resolve, reject) {
+      if (photoCnt){
+        for (var i = 0; i < photoCnt; i++) {
+          that.uploadImg(photo[i], function (res) {
+            if (res.code == 200) {
+              photo_wall.push(res.data);
+              //上传到最后一张图片才终止
+              if (photo_wall.length == photoCnt) {
+                resolve(photo_wall);
+              }
+            } else {
+              app.tishi(res.msg);
+              reject('上传照片失败')
+            }
+          });
+        }
+      }else{
+        resolve(photo_wall);
+      }
+     
+    })
+  },
+  //上传图片文件
+  uploadImg(file, callBack) {
+    wx.uploadFile({
+      url: app.d.hostUrl + 'Relevance/uploadImg',
+      filePath: file,
+      name: 'file',
+      formData: { 'sessionid': app.globalData.loginInfo.sessionid },
+      success(res) {
+        var res = JSON.parse(res.data);
+        typeof callBack == 'function' && callBack(res);
+      }
+    })
+  },
+  //取消发布
+  cancel:function(){
+    wx.navigateBack();
   }
 })

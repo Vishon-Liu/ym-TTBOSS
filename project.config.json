@@ -33,13 +33,13 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 1,
+			"current": 2,
 			"list": [
 				{
 					"id": 0,
 					"name": "token",
 					"pathName": "pages/default/default",
-					"query": "token=d13c41MjU3PT0nLxgYCAIjHUZyNHB3NDVWAnh5CzUs",
+					"query": "token=0fba60MjU3PT0nLxgYCFYlRkchNnkmZzwEBCAsAW0s",
 					"scene": "1011"
 				},
 				{
@@ -47,6 +47,13 @@
 					"name": "token",
 					"pathName": "pages/index/index",
 					"query": "scene=d13c41MjU3PT0nLxgYCAIjHUZyNHB3NDVWAnh5CzUs",
+					"scene": "1011"
+				},
+				{
+					"id": 2,
+					"name": "moveToken",
+					"pathName": "pages/default/default",
+					"query": "move=3ff67eMzAzPT0kLxoeD1QiFkEgMXgjYTQJAiAtDDskPQ",
 					"scene": "1011"
 				}
 			]

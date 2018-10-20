@@ -13,6 +13,7 @@ Page({
     current:0,//照片墙当前指标数
     sessionid:'',
     disabled:false,//防止多次提交
+    showWidth:'',
     //聚焦监听 
     'nickname': false, 
     'mail': false, 
@@ -26,12 +27,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var that=this;
     this.setData({sessionid:options.sessionid});
-    // var tempFilePaths = ["http://tmp/wx21962e3a2e011576.o6zAJs4mvf3tup-7eETI7zPOM_co.JBA5hhTDVL1465fc53e785b17ad414cd68d32c703f56.png",
-    //   "http://tmp/wx21962e3a2e011576.o6zAJs4mvf3tup-7eETI7zPOM_co.q8VuKzatMCAXa22f902614e38a1489b1464c6f3e0282.jpg"
-    // ];
-    // console.log(tempFilePaths);
-    // this.recursionImg(0, tempFilePaths.length - 1, tempFilePaths);
+    wx.getSystemInfo({
+      success: function (info) {
+        console.log(info.windowWidth*0.86)
+        that.setData({ 'showWidth': info.windowWidth * 0.86 });
+      }
+    }) 
   },
   //关联公司
   relevanceCompany:function(e){
@@ -183,41 +186,28 @@ Page({
       sizeType: ['compressed'],
       success: function (res) {
         var tempFilePaths = res.tempFilePaths;
-        //  var tempFilePaths =[        "http://tmp/wx21962e3a2e011576.o6zAJs4mvf3tup-7eETI7zPOM_co.JBA5hhTDVL1465fc53e785b17ad414cd68d32c703f56.png",
-        //    "http://tmp/wx21962e3a2e011576.o6zAJs4mvf3tup-7eETI7zPOM_co.q8VuKzatMCAXa22f902614e38a1489b1464c6f3e0282.jpg"
-        //  ];
         console.log(tempFilePaths);
         that.recursionImg(0, tempFilePaths.length-1, tempFilePaths);
-          // that.setData({
-          //   bannerImg: that.data.bannerImg.concat(tempFilePaths)
-          // });
-        //console.log(that.data.bannerImg)
-        // for (var i = 0; i < tempFilePaths.length; i++) {
-        //   that.compress(tempFilePaths[i],'450',false, function (res) {
-        //     // console.log(i);
-        //     // console.log(res)
-        //     that.setData({
-        //       bannerImg: that.data.bannerImg.concat(res.tempFilePath)
-        //     });
-        //   });
-        // }
       },
     })
   },
   //递归压缩图片
-  recursionImg: function (curr,cnt, tempFilePaths){
-   
+  recursionImg: function (curr,cnt, tempFilePaths){  
     var that=this;
-    this.compress(tempFilePaths[curr], 400, false,function(res){
+    wx.showLoading({ title: '上传中' });
+    this.compress(tempFilePaths[curr], 450, false,function(res){
       console.log(curr);
-      if (curr < cnt) that.recursionImg(++curr, cnt, tempFilePaths);
+     
       that.setData({
         bannerImg: that.data.bannerImg.concat(res.tempFilePath)
       },function(){
-        if (curr < cnt) that.recursionImg(++curr, cnt, tempFilePaths);
-      });
-      
-    } );
+        if (curr < cnt){
+          that.recursionImg(++curr, cnt, tempFilePaths);
+        } else{
+          wx.hideLoading();
+        }
+      });  
+    });
   },
   //删除图片
   delPhoto(e) {
@@ -234,15 +224,12 @@ Page({
   //maxWidth限制宽度(必选)
   //maxHeight限制高度(可选)
   //callback压缩完成回调方法(可选)
-  compress(file,maxWidth,maxHeight,callback) {    //接收传过来的图片
+  compress(file,maxWidth,maxHeight,callback) {    
     var that=this;
-    console.log('开始压缩')
-    console.log(file);
     //获取原图片信息
     wx.getImageInfo({
       src: file,
       success: function (res) {
-        console.log('压缩图片基本信息');
         var width=res.width,height=res.height;
         if(width>maxWidth){
           //超出限制宽度
@@ -255,28 +242,25 @@ Page({
           width = (maxHeight / height) * width.toFixed(2);
           height = maxHeight.toFixed(2);
         }
-       
+        //设置比例压缩的高宽
         that.setData({ thumbWidth:width,thumbHeight: height });
-        
-        //按比例压缩图片
-        const ctx = wx.createCanvasContext('firstCanvas');
-        ctx.drawImage(file, 0, 0, width, height);
-        
-        ctx.draw(false, function () {    
-          console.log('生成压缩图片', width, height, ctx) ;
-          //绘画完成回调
-          //生成图片
-          wx.canvasToTempFilePath({
-            canvasId: 'firstCanvas',
-            success: function (res) {
-              console.log('压缩完成:'+res);
-
-              typeof callback == "function" && callback(res);           
-            },fail(res){
-              console.log('失败:'+res)
-            }
-          })
-        });
+        //延迟绘画
+        setTimeout(function(){
+          var ctx = wx.createCanvasContext('firstCanvas');
+          ctx.drawImage(file, 0, 0, width, height);
+          ctx.draw(false, function () {
+            //绘画完成回调,生成图片
+            wx.canvasToTempFilePath({
+              canvasId: 'firstCanvas',
+              success: function (res) {
+                typeof callback == "function" && callback(res);
+              },fail(res) {
+                console.log('失败:')
+                console.log(res);
+              }
+            })
+          });
+        },100)       
       }
     })
   },
@@ -287,9 +271,30 @@ Page({
     })
   },
   //预览照片墙
-  showPhoto() {
+  showPhoto(e) {
+    var index = e.currentTarget.dataset.index;
+    var list = this.data.bannerImg;
+    console.log(e.currentTarget.dataset.index)
     wx.previewImage({
-      urls: this.data.bannerImg,
+      current: list[index],
+      urls: list,
     })
   },
+  //自适应照片高宽
+  bannersAdapt:function(e){
+    console.log(e);
+    var data = e.detail;
+    var index = e.target.dataset.index;
+    var list=this.data.bannerImg;
+    var ratio = this.data.showWidth/data.width  ;
+    list[index]['width'] = this.data.showWidth;
+    list[index]['height'] = data.height * ratio;
+    console.log(list[index])
+    this.setData({bannerImg:list});
+  } ,
+  //监听轮播图变更
+  bannerChange:function(e){
+    //console.log(e);
+    this.setData({current:e.detail.current});
+  }
 })

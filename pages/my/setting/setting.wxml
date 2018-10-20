@@ -1,15 +1,73 @@
-<!--pages/my/setting/setting.wxml-->
+<!--pages/personal/personal.wxml-->
 <view class='page'>
-  <view class='list'>
-    <view class='line' bindtap='setVia'>
-      <text>头像</text>
-      <view>
-        <image mode='aspectFill' src='/images/bosco1.jpg'></image>
-      </view>
-    </view>
-    <view class='line'>
-      <text>名字</text>
-      <input class='nickname' type='text' value='阿斯蒂芬'></input>
-    </view>
+  <canvas style="width: {{thumbWidth}}px; height: {{thumbHeight}}px;border:1px solid black;position: absolute; left: -1000px; top:-1000px;" canvas-id="firstCanvas"></canvas>
+  <view class='avatar' bindtap='addAvatar'>
+    <text>头像：建议200*200</text>
+    <image wx:if="{{tmpAvatar.length}}" src="{{tmpAvatar[0]}}"
+     catchtap="showAvatar" data-type='tmp'></image>
+    <image wx:elif="{{avatarImg.length}}" src='{{avatarImg[0]}}'
+     catchtap='showAvatar' data-type='org'></image>
+    <i-icon wx:else type='mine' size="50" catchtap='addAvatar'></i-icon>
   </view>
+  <view class='Instagram'>
+    <view class='photo'>
+      <text>照片墙:建议450*750</text>
+      <i-icon type='picture' size='50' catchtap='addPhoto' style="width:50px;height:50px;margin-right:20px;"></i-icon>
+    </view>
+    <swiper wx:if='{{bannerImg.length||tmpBanners.length}}' style='min-height:240px;'
+     indicator-dots="true" autoplay="true" current="{{current}}">
+      <!--渲染旧的照片墙-->
+      <swiper-item wx:for="{{bannerImg}}" wx:key="{{index}}" 
+       style='position: relative;'>
+        <image mode='widthFix' src="{{serverName}}{{item}}" style="width:100%;min-height:240px;" catchtap='showPhoto' data-src="{{serverName}}{{item}}" />
+        <i-icon type='close' size='18' class='close' data-index="{{index}}" catchtap='delPhoto' data-type='org'></i-icon>
+      </swiper-item>
+      <!--渲染新的照片墙-->
+      <swiper-item wx:for="{{tmpBanners}}" wx:key="{{index}}" 
+       style='position: relative;'>
+        <image mode='widthFix' src="{{item}}" style="width:100%;min-height:240px;" catchtap='showPhoto' data-src="{{item}}" />
+        <i-icon type='close' size='18' class='close' data-index="{{index}}" catchtap='delPhoto' data-type='tmp'></i-icon>
+      </swiper-item>
+    </swiper>
+  </view>
+  <form class='formList' bindsubmit="editInfo">
+    <view class='item'>
+      <text>昵称:</text>
+      <input type='text' placeholder='请输入' name="nickname" 
+      focus='{{nickname}}' value="{{loginInfo.nickname}}"></input>
+    </view>
+    <view class='item'>
+      <text>邮箱:</text>
+      <input type='text' placeholder='请输入' name="mail" value="{{loginInfo.info.mail}}"
+      focus='{{mail}}'></input>
+    </view>
+    <view class='item'>
+      <text>手机号:</text>
+      <input type='number' placeholder='请输入' name="tel" value="{{loginInfo.tel}}"
+      focus='{{tel}}'></input>
+    </view>
+    <view class='item'>
+      <text>微信号:</text>
+      <input type='text' placeholder='请输入' name="wechat" focus='{{wechat}}'
+      value="{{loginInfo.info.wechat}}"></input>
+    </view>
+    <view class='item'>
+      <text>欢迎语:</text>
+      <input type='text' placeholder='请输入' focus='{{welcome_speech}}'
+      name="welcome_speech" value="{{loginInfo.info.welcome_speech}}"></input>
+    </view>
+    <view class='item'>
+      <text>职业名称:</text>
+      <input type='text' placeholder='请输入' name="job_title"
+      focus='{{job_title}}' value="{{loginInfo.info.job_title}}"></input>
+    </view>
+    <view style='flex-flow: column nowrap;align-items:start' class='item'>
+      <text style='margin-top:1rem'>个人简介:</text>
+      <textarea style='width:100%;height:100px;' name="intro"
+      focus='{{intro}}' value="{{loginInfo.info.intro}}"></textarea>
+    </view>
+    <view class="btn-area">
+      <button type='primary' formType="submit" disabled="{{disabled}}">更新</button>
+    </view>
+  </form>
 </view>

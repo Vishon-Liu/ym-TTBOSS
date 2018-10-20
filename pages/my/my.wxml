@@ -3,21 +3,20 @@
   <view class='bg'></view>
   <view class='card'>
     <view class='card_info'>
-      <image mode='aspectFill' src='/images/bosco1.jpg'></image>
+      <image mode='aspectFill' src='{{loginInfo.photo}}'></image>
       <view>
-        <text style='font-size:.8rem;font-weight:600;margin-bottom:.4rem;'>独孤孤独咕噜犊子</text>
-        <text>香港明星</text>
-        <text>娱乐圈</text>
+        <text style='font-size:.8rem;font-weight:600;margin-bottom:.4rem;'>{{loginInfo.nickname}}</text>
+        <text>{{loginInfo.company_name}}</text>
+        <text>{{loginInfo.info.job_title}}</text>
       </view>
     </view>
-    <view class='poster'>
+    <view class='poster' bindtap="toSetting">
       <view>
         <icon style='color:#0040ED;' class='iconfont icon-mingpian'></icon>
-        <text>名片海报</text>
+        <text>修改</text>
       </view>
       <view>
-        <icon bindtap='toSetting' class='iconfont icon-shezhi'></icon>
-        <!-- <icon class='iconfont icon-arrow-right'></icon> -->
+        <icon class='iconfont icon-shezhi'></icon>
       </view>
     </view>
   </view>
@@ -29,12 +28,13 @@
         <icon style='background:#fff;color:#575757;' class='iconfont icon-shuangjiantouyou'></icon>
       </view>
     </view>
-    <!-- <view class='list'>
-      <icon class='iconfont icon-yj'></icon>
-      <view class='list_info'>
-        <text>查看名片</text>
-        <text>45</text>
+    <view class='list'>
+      <icon class='iconfont icon-pengyouquan'></icon>
+      <view class='list_info' bindtap='moveUser'>
+        <text>一键转移</text>
+        <icon style='background:#fff;color:#575757;' class='iconfont icon-shuangjiantouyou'></icon>
       </view>
-    </view> -->
+    </view>
+    <image src="{{moveQrcord}}" wx:if="{{moveQrcord}}" style="width:100%"></image>
   </view>
 </view>

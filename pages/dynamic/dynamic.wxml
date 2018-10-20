@@ -6,7 +6,7 @@
     <view class='box'>
       <view class='a'>
         <text style='color:#626F9C;font-weight:600;'>{{loginInfo.company_name}}</text>
-        <text style='color:#626F9C;font-size:.6rem'>转发</text>
+        <!-- <text style='color:#626F9C;font-size:.6rem'>转发</text> -->
       </view>
       <view class='article' data-id='{{item.id}}' bindtap='toDetail'>
         <image src='{{item.title_img}}'></image>
