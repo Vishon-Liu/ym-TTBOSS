@@ -7,6 +7,7 @@ Page({
    */
   data: {
     loginInfo:[],
+    murky:true,
     moveQrcord:false,
   },
   /**
@@ -28,12 +29,19 @@ Page({
       url: './setting/setting',
     })
   },
+  //关闭笼罩层
+  close(){
+    this.setData({ murky: !this.data.murky });
+  },
   //生成一键转移二维码
   moveUser:function(){
-    var that=this;
-    var url = app.d.hostUrl +'User/moveToke';
-    app.http(url,[],'get',function(res){
-      that.setData({ moveQrcord:res});
-    })
+    var img = "http://push.com/static/qrcode.jpg";
+    this.setData({ moveQrcord: img, murky: !this.data.murky});
+    console.log(234);
+    // var that=this;
+    // var url = app.d.hostUrl +'User/moveToke';
+    // app.http(url,[],'get',function(res){
+    //   that.setData({ moveQrcord:res});
+    // })
   }
 })

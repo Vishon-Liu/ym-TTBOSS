@@ -1,4 +1,16 @@
 /* pages/my/my.wxss */
+/* 笼罩层 */
+.murky{
+  position:fixed;
+  bottom: 0;
+  left: 0;
+  width:100%;
+  height:100%;
+  text-align:center;
+  background:rgba(0,0,0,0.8);
+  filter:Alpha(opacity=60);
+  z-index:9;
+}
 page{
   background: #fff;
 }
@@ -85,4 +97,11 @@ page{
   border-bottom: .1rpx solid #eee;
   justify-content: space-between;
   align-items: center;
+}
+.moveQrcord{
+  position: fixed;
+  width: 60%;
+  top:30%;
+  left: 20%;
+  z-index: 13;
 }

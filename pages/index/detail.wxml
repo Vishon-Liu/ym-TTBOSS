@@ -1,15 +1,16 @@
 <!--pages/index/detail.wxml-->
 <view hidden='{{murky}}' bindtap='close' class='murky' id='murky'></view>
-<scroll-view style='height:100vh' lower-threshold='50' bindscrolltolower='nextPage' scroll-y class='page'>
-  <view style='margin:.5rem 1rem;' class='calendarModel' enable-back-to-top>
-    <view class='line1'>
-      <text bindtap='resetDate'>{{reset?'重置':startTime}}</text>
-      <icon bindtap='calendar' class='iconfont icon-rili'></icon>
-    </view>
-    <calendar wx:if='{{showCalendar}}' calendar-style="calendar" days-color="{{nowDateStyle}}" 
-    weeks-type='cn' active-type='rounded' binddayClick="dayClick" bindnextMonth="monitorMonth" 
-    bindprevMonth="monitorMonth"/>
+<view class='calendarModel' enable-back-to-top>
+  <view class='line1'>
+    <text bindtap='resetDate'>{{reset?'重置':startTime}}</text>
+    <icon bindtap='calendar' class='iconfont icon-rili'></icon>
   </view>
+  <calendar wx:if='{{showCalendar}}' calendar-style="calendar" days-color="{{nowDateStyle}}" 
+  weeks-type='cn' active-type='rounded' binddayClick="dayClick" bindnextMonth="monitorMonth" 
+  bindprevMonth="monitorMonth"/>
+</view>
+<scroll-view lower-threshold='50' bindscrolltolower='nextPage' scroll-y class='page' 
+  style='height:100vh;box-sizing:border-box;padding-top:3rem;'>
   <!-- <view class='line2'>共 4 次</view> -->
   <view wx:for='{{behavior}}' data-id='{{item.id}}' class='info'>
     <view class='i2'>

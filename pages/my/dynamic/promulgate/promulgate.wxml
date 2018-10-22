@@ -3,9 +3,8 @@
 <form' bindsubmit="postDynamic">
   <view class='promulgate'>
     <text bindtap="cancel">取消</text>
-    <button style='color:rgb(75, 205, 63);' formType="submit" disabled="{{disabled}}">
+    <button class='btn' formType="submit" disabled="{{disabled}}">
     发布</button>
-    <!-- <text bindtap='promulgate' style='color:rgb(75, 205, 63);'>发布</text> -->
   </view>
   <view class='page'>
     <textarea class='content' placeholder='这一刻的想法...' adjust-position='false' 

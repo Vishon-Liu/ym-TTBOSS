@@ -17,8 +17,8 @@
       </i-modal>
       <view class='t'>{{item.details}}</view>
       <view class='{{ item.imgs.length==1? "p" : item.imgs.length==4? "f" : "m" }}'>
-        <image wx:for='{{item.imgs}}' wx:key='{{this}}' wx:for-item='imgs' data-src="{{imgs}}" bindtap='preview' src='{{imgs}}' 
-        mode='{{imgs.length==1?"aspectFill":"aspectFill"}}'></image>
+        <image wx:for='{{item.imgs}}' wx:key='{{this}}' wx:for-item='imgs' data-src="{{item.imgs}}"
+        bindtap='preview' src='{{imgs}}' mode='{{imgs.length==1?"aspectFill":"aspectFill"}}'></image>
       </view>
       <view class='pl'>
         <text class='time'>{{item.add_time}}</text>

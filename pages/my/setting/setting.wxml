@@ -12,7 +12,7 @@
   <view class='Instagram'>
     <view class='photo'>
       <text>照片墙:建议450*750</text>
-      <i-icon type='picture' size='50' catchtap='addPhoto' style="width:50px;height:50px;margin-right:20px;"></i-icon>
+      <i-icon type='picture' size='50' catchtap='addPhoto'></i-icon>
     </view>
     <swiper wx:if='{{bannerImg.length||tmpBanners.length}}' style='min-height:240px;'
      indicator-dots="true" autoplay="true" current="{{current}}">

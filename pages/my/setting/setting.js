@@ -83,6 +83,7 @@ Page({
       //调用编辑接口
       var url = app.d.hostUrl + 'User/editInfo';
       app.http(url,data,'post',function(newData){ 
+        console.log(newData); 
         //更新缓存
         wx.getStorage({
           key: 'loginInfo',

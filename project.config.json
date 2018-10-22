@@ -33,13 +33,13 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 2,
+			"current": 0,
 			"list": [
 				{
 					"id": 0,
 					"name": "token",
 					"pathName": "pages/default/default",
-					"query": "token=0fba60MjU3PT0nLxgYCFYlRkchNnkmZzwEBCAsAW0s",
+					"query": "token=a0802fMjU3PT0nLxgYCAB1RhUmOnh4MTRUViIvW2os",
 					"scene": "1011"
 				},
 				{

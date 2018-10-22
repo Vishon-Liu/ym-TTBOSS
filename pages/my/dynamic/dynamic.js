@@ -38,13 +38,20 @@ Page({
   },
   //跳发布页
   promulgate(){
-    wx.navigateTo({
+    wx.redirectTo({
       url: 'promulgate/promulgate',
     })
   },
   //评论收起
   close() {
     this.showPl();
+  },
+  // 图片预览
+  preview(e){
+    console.log(e);
+    wx.previewImage({
+      urls: e.target.dataset.src,
+    })
   },
   // 弹出评论
   showPl(e) {

@@ -131,7 +131,7 @@ Page({
     wx.showLoading({ title: '提交中' });
     this.uploadPhoto().then(function (res) {
       data.photo_wall = res;//设置照片墙参数
-      var url = app.d.hostUrl +'/Dynamic/add';
+      var url = app.d.hostUrl +'Dynamic/add';
       wx.hideLoading();
       app.http(url,data,'post',function(res){
         wx.hideLoading();

@@ -14,9 +14,9 @@
     </view>
   </view>
   <view wx:else>
-    <view class='chat'>
-      <view class='chat_info'>
-       <text >暂无关注用户</text>   
+    <view class='chat' style='justify-content:center;'>
+      <view class='chat_info' style='text-align:center;'>
+       <text >暂无用户信息</text>   
       </view>
     </view>
   </view>

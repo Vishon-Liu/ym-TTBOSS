@@ -166,3 +166,24 @@
   width: 100%;
   background: white;
 }
+.notfound{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.notfound view{
+  display: flex;
+  align-items: center;
+  flex-flow: column nowrap;
+}
+.notfound image{
+  width: 8rem;
+  height: 8rem;
+  margin-bottom: 2rem;
+}
+.notfound text{
+  font-size: .8rem;
+  color: #BCBEBD;
+}
