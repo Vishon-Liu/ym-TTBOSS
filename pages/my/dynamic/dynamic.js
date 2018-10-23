@@ -80,8 +80,13 @@ Page({
   loadMore(e) {
     var that = this;
     console.log({ '加载更多': e });
+    var beforePage = that.data.page;
+    console.log({ '之前页': that.data.page });
     if (that.data.load) {
       that.setData({ page: that.data.page + 1 });
+    }
+    if (that.data.page != beforePage) {
+      that.dynamicsRequest();
     }
   },
   // 跳转到详情
@@ -130,6 +135,11 @@ Page({
   // 评论留言
   clickMsg(e){
     console.log({"评论键盘升起":e});
+  },
+  // 评论折叠
+  loadAll(e) {
+    console.log(e);
+    this.setData({ condition: !this.data.condition });
   },
   // 动态请求
   dynamicsRequest() {

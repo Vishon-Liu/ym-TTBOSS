@@ -42,9 +42,15 @@
           <text wx:for='{{item.user_like}}' wx:key='{{this}}' wx:for-item="user_like">{{user_like}},</text>
         </view>
         <view class='message' style='{{item.showLike && item.commList.length!=0? "border-top: 1rpx solid #ccc;":"border-top: none"}}'>
-          <view wx:for='{{item.commList}}' wx:key='{{this}}' wx:for-item="commList">
+          <view wx:for='{{item.commList}}' wx:if='{{index<(condition?item.commList.length:"5")}}' 
+          wx:key='{{this}}' wx:for-item="commList">
             <text style='color: #626F9C; font-weight:600;'>{{commList.nickname}}: </text>
             <text>{{commList.msg}}</text>
+          </view>
+          <!-- 评论折叠 -->
+          <view bindtap='loadAll' wx:if='{{item.commList.length>5}}' style='color:#626F9C;font-size:.8rem'>
+            {{!condition?'展开':'收起'}}
+            <icon class='iconfont {{!condition?"icon-jiantouxia":"icon-icon_arrow_top"}}'></icon>
           </view>
         </view>
       </view>

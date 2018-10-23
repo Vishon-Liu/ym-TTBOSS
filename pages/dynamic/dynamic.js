@@ -65,8 +65,13 @@ Page({
   loadMore(e){
     var that = this;
     console.log({'加载更多':e});
+    var beforePage = that.data.page;
+    console.log({ '之前页': that.data.page });
     if (that.data.load) {
       that.setData({ page: that.data.page + 1 });
+    }
+    if (that.data.page != beforePage) {
+      that.dynamicsRequest();
     }
   },
   // 点赞
@@ -105,6 +110,11 @@ Page({
   // 评论
   clickMsg(e){
     console.log({'评论':e});
+  },
+  // 评论折叠
+  loadAll(e){
+    console.log(e);
+    this.setData({ condition: !this.data.condition});
   },
   // 动态请求
   dynamicsRequest(){
