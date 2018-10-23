@@ -2,8 +2,8 @@
 App({
   //配置
   d: {
-    hostUrl: 'http://push.com/bossapi/', //请求的主域名
-    serverName:'http://push.com',//域名
+    hostUrl: 'https://push.ymindex.com/bossapi/', //请求的主域名
+    serverName:'https://push.ymindex.com',//域名
   },
   globalData: {
     userInfo: false,//用户的基本信息
