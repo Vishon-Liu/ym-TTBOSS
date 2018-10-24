@@ -1,4 +1,10 @@
 <!--pages/my/dynamic/dynamic.wxml-->
+<!-- 评论输入框 -->
+<view class='inputComments' hidden='{{!show}}'>
+  <input type="text" focus='{{focus}}' bindinput="inputMsg" cursor-spacing='{{12}}
+  bindconfirm="confirmMsg" value="{{inputValue}}"></input>
+  <button catchtap="confirmMsg">确定</button>
+</view>
 <i-message id="message" />
 <view hidden='{{murky}}' bindtap='close' class='murky' id='murky'></view>
 <view class='promulgate'>
@@ -35,7 +41,7 @@
                 <icon class='iconfont icon-xin'></icon>
                 <text style='color:#fff;margin-left:.3rem;'>点赞</text>
               </view>
-              <view bindtap='clickMsg' class='zan'>
+              <view bindtap='clickMsg' class='zan' data-index="{{index}}">
                 <icon class='iconfont icon-pinglun'></icon>
                 <text style='color:#fff;margin-left:.3rem;'>评论</text>
               </view>
@@ -63,12 +69,6 @@
           </view>
         </view>
       </view>
-      <!-- 评论输入框  style='{{keyUp?"bottom:-3rem":"bottom:0"}}'-->
-      <!-- <view class='inputComments' >
-        <input focus='{{keyUp}}' bindblur='loseBlur' adjust-position='{{true}}' 
-        cursor-spacing='{{12}}'></input>
-        <button>send</button>
-      </view> -->
     </view>
   </view>
     

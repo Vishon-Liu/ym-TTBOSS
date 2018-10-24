@@ -14,6 +14,9 @@ Page({
    */
   onLoad: function(options) {
     var that = this;
+    wx.showLoading({
+      title: '加载中',
+    })
     this.setData({
       info: app.globalData.loginInfo
     }, function() {
@@ -212,6 +215,7 @@ Page({
     var TSTop = qrTop + qrHeight + 20; //地址顶部边距
     ctx.fillText(TS, TSLeft, TSTop);
     ctx.draw();
+    wx.hideLoading();
   },
 
 

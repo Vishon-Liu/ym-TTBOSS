@@ -14,6 +14,9 @@ Page({
     murky: true,
     companyDynamic:[],
     animationData:{},
+    focus:false,
+    currentIndex:-1,
+    inputValue:'',
   },
   /**
    * 生命周期函数--监听页面加载
@@ -109,7 +112,36 @@ Page({
   },
   // 评论
   clickMsg(e){
+    this.setData({ focus:true});
     console.log({'评论':e});
+    this.setData({ currentIndex: e.currentTarget.dataset.index});
+  },
+  //输入评论
+  inputMsg:function(e){
+    this.setData({ inputValue: e.detail.value});
+  },
+  //确定评论
+  confirmMsg:function(){
+    console.log(11)
+    var index=this.data.currentIndex;
+    var value=this.data.inputValue;
+    var list = this.data.companyDynamic;
+    console.log(list);
+    var url = app.d.hostUrl +'Dynamic/comment';
+    var data={id:list[index]['id'],msg:value},that=this;
+    console.log(list[index])
+    app.http(url,data,'post',function(res){
+      data.nickname=app.globalData.loginInfo.nickname;
+      list[index]['commList']=list[index]['commList'].concat(data);
+      list[index]['showLike'] = true;
+      
+      console.log(list[index]['commList'].concat(data))
+      console.log(res);
+      that.setData({ companyDynamic: list});
+      
+    })
+    this.setData({inputValue:''});
+    this.showPl();
   },
   // 评论折叠
   loadAll(e){
