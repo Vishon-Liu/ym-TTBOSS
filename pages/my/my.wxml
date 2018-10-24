@@ -5,16 +5,22 @@
   <view class='card'>
     <view class='card_info'>
       <image mode='aspectFill' src='{{loginInfo.photo}}'></image>
-      <view>
-        <text style='font-size:.8rem;font-weight:600;margin-bottom:.4rem;'>{{loginInfo.nickname}}</text>
-        <text>{{loginInfo.company_name}}</text>
-        <text>{{loginInfo.info.job_title}}</text>
+      <view class='setCard'>
+        <view class='cardText'>
+          <text style='font-size:.8rem;font-weight:600;margin-bottom:.4rem;'>{{loginInfo.nickname}}</text>
+          <text>{{loginInfo.company_name}}</text>
+          <text>{{loginInfo.info.job_title}}</text>
+        </view>
+        <view class='cardIcon' bindtap="toSetting">
+          <icon class='iconfont icon-icon--1'></icon>
+          <text style='margin-top:.5rem;'>编辑</text>
+        </view>
       </view>
     </view>
-    <view class='poster' bindtap="toSetting">
+    <view class='poster' bindtap='toPoster'>
       <view>
         <icon style='color:#0040ED;' class='iconfont icon-mingpian'></icon>
-        <text>修改</text>
+        <text>名片海报</text>
       </view>
       <view>
         <icon class='iconfont icon-shezhi'></icon>

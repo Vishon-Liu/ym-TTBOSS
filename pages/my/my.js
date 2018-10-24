@@ -29,6 +29,11 @@ Page({
       url: './setting/setting',
     })
   },
+  toPoster(e){
+    wx.navigateTo({
+      url: './poster/poster',
+    })
+  },
   //关闭笼罩层
   close(){
     this.setData({ murky: !this.data.murky });

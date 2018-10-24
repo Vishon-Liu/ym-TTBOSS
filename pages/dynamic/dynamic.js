@@ -114,6 +114,7 @@ Page({
   // 评论折叠
   loadAll(e){
     console.log(e);
+    e.currentTarget.dataset.id.is_like=0;
     this.setData({ condition: !this.data.condition});
   },
   // 动态请求

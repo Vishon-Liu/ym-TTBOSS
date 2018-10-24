@@ -48,7 +48,7 @@
             <text>{{commList.msg}}</text>
           </view>
           <!-- 评论折叠 -->
-          <view bindtap='loadAll' wx:if='{{item.commList.length>5}}' style='color:#626F9C;font-size:.8rem'>
+          <view bindtap='loadAll' data-id='{{item}}' wx:if='{{item.commList.length>5}}' style='color:#626F9C;font-size:.8rem'>
             {{!condition?'展开':'收起'}}
             <icon class='iconfont {{!condition?"icon-jiantouxia":"icon-icon_arrow_top"}}'></icon>
           </view>

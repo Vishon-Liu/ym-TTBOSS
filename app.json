@@ -1,19 +1,19 @@
 {
   "pages":[ 
-    
+   
     "pages/default/default",
     "pages/my/setting/setting",  
     "pages/personal/personal",
     "pages/my/dynamic/promulgate/promulgate",   
     "pages/message/message",
-    "pages/my/dynamic/dynamic", 
+      "pages/my/dynamic/dynamic",
     "pages/index/index",
     "pages/index/detail",
     "pages/index/client",    
     "pages/message/detail/detail",
     "pages/dynamic/dynamic",
     "pages/dynamic/detail",
-    
+    "pages/my/poster/poster",
     "pages/my/my"
   ],
   "window":{

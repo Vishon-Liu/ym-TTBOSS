@@ -1,0 +1,6 @@
+<!--pages/my/poster/poster.wxml-->
+<canvas 
+  style="margin:5vh auto;width: {{width}}px; height: {{height}}px;border-radius:1rem;box-shadow:0px 0px 10px 2px #DCDCDD;" 
+  canvas-id="firstCanvas">
+</canvas>
+<button style='width:90%' type='primary' bindtap='saveImage'>保存名片海报分享到朋友圈</button>

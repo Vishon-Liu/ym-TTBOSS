@@ -63,8 +63,14 @@
           </view>
         </view>
       </view>
-
+      <!-- 评论输入框  style='{{keyUp?"bottom:-3rem":"bottom:0"}}'-->
+      <!-- <view class='inputComments' >
+        <input focus='{{keyUp}}' bindblur='loseBlur' adjust-position='{{true}}' 
+        cursor-spacing='{{12}}'></input>
+        <button>send</button>
+      </view> -->
     </view>
   </view>
+    
   <i-load-more tip='{{tip}}' loading="{{ load }}"/>
 </scroll-view>

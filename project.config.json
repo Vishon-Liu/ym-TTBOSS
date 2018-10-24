@@ -4,7 +4,7 @@
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
@@ -39,7 +39,7 @@
 					"id": 0,
 					"name": "token",
 					"pathName": "pages/default/default",
-					"query": "token=a0802fMjU3PT0nLxgYCAB1RhUmOnh4MTRUViIvW2os",
+					"query": "token=7ea9acMjU3PT0nLxgYCAIkEUd2NiUhY2dVAiAsDj4s",
 					"scene": "1011"
 				},
 				{

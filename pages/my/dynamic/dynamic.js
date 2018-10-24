@@ -17,6 +17,7 @@ Page({
     personDynamic: [],
     animationData: {},
     delID:'',
+    keyUp:false,
     actions: [
       {
         name: '取消'
@@ -35,6 +36,12 @@ Page({
   onLoad: function (options) {
     this.setData({ loginInfo: app.globalData.loginInfo });
     this.dynamicsRequest();
+  },
+  /**
+ * 生命周期函数--监听页面显示
+ */
+  onShow: function () {
+    
   },
   //跳发布页
   promulgate(){
@@ -132,10 +139,15 @@ Page({
     app.http(app.d.hostUrl + 'Dynamic/noLike', data, 'post');
     this.setData({ personDynamic: personDynamic });
   },
-  // 评论留言
-  clickMsg(e){
-    console.log({"评论键盘升起":e});
-  },
+  // // 评论留言
+  // clickMsg(e){
+  //   console.log({"评论键盘升起":e});
+  //   this.setData({keyUp:true});
+  //   console.log({ '键盘':this.data.keyUp});
+  // },
+  // loseBlur(e) {
+  //   console.log({ "评论键盘收起": e });
+  // },
   // 评论折叠
   loadAll(e) {
     console.log(e);
