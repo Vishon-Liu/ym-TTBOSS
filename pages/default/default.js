@@ -1,5 +1,49 @@
 // pages/default/default.js
-var app=getApp();
+//定义worker进程变量
+var worker = '';
+//引用CryptoJS加密插件
+const CryptoJS = require('../../utils/aes.min.js');
+const app = getApp();
+//消息对象
+const msg = {
+  //心跳消息
+  ping: function () {
+    var data = { 'type': 'ping', 'msg': '233' };
+    this.send(data);
+  },
+  //转移回调
+  moveCall: function () {
+    var data = { 'type': 'moveCall', 'msg': 'ok' };
+    this.send(data);
+  },
+  //关闭通讯
+  close: function () {
+    var data = { 'x': '123' };
+    this.send(data);
+  },
+  //登录消息
+  login: function () {
+    var data = {
+      'type': 'login',
+      'from_uid': parseInt(app.globalData.loginInfo.id),
+      'to_uid': 0,
+      'grade': 'moveStaff',
+      'key': app.globalData.loginInfo.socket
+    };
+    this.send(data);
+  },
+  //发送消息
+  send: function (data) {
+    var msg = JSON.stringify(data);
+    console.log('发送：' + msg);
+    wx.sendSocketMessage({
+      'data': msg,
+      success: function () {
+        worker.postMessage({ 'handle': 'clear' })
+      }
+    });
+  },
+};
 Page({
   /**
    * 页面的初始数据
@@ -72,6 +116,14 @@ Page({
         wx.redirectTo({
           url: '/pages/personal/personal?sessionid=' + res.data,
         })
+      }else if(res.code==220){
+        //登录成功跳转，缓存和全局变量写入通信ID，跳转首页
+        app.globalData.loginInfo = res.data;
+        //设置有效时间为20小时
+        res.data.valid_time = new Date().getTime() + 72000000;
+        wx.setStorage({ key: 'loginInfo', data: res.data });
+        //通讯转移成功
+        that.startLient();
       }else{
         this.setData({ 'login': true });
       }
@@ -126,5 +178,53 @@ Page({
       })
     })
   },
-  
+  //获取WebSocket通讯凭证
+  token: function (time) {
+    var text = app.globalData.loginInfo.sessionid + time;
+    //注意密钥的个数是4的倍数
+    var key = CryptoJS.enc.Utf8.parse('1aA.5-x@cxbv7856');
+    var ciphertext = CryptoJS.AES.encrypt(text, key, {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.ZeroPadding
+    }).toString();
+    var words = CryptoJS.enc.Utf8.parse(ciphertext);
+    //base64加密编码，避免提交后台的时候包含转义字符导致解码失败 
+    return CryptoJS.enc.Base64.stringify(words)
+  },
+  //开启监听
+  startLient: function () {
+    var that = this;
+    //创建worker进程
+    worker = wx.createWorker('workers/fib/index.js');
+    //获取worker进程返回的消息
+    worker.onMessage((res) => {
+      //console.log(res)
+      //发送心跳
+      if (res.handle == 'ping') msg.ping();
+    })
+    wx.request({
+      url: app.d.hostUrl + 'index/time',
+      success: function (res) {
+        //创建WebSocket
+        wx.connectSocket({
+          url: "wss://push.ymindex.com/wss/webSocketServer?token="
+            + that.token(res.data),
+        })
+      }
+    })
+    //连接WebSocket成功
+    wx.onSocketOpen(function (e) {
+      console.log('连接成功')
+      msg.login()
+    })
+    //监听WebSocket 接受到服务器的消息
+    wx.onSocketMessage(function (e) {
+      console.log(e)
+      var data = JSON.parse(e.data);
+      if (data.type == "login") {
+        msg.moveCall();
+        wx.switchTab({ url: '/pages/index/index' });
+      }
+    })
+  },
 })

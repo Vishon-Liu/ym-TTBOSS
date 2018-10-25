@@ -8,16 +8,19 @@ Page({
    */
   data: {
     page: 1,
-    thisDH:'',
+    thisDH: '',
     show: false,
     tip: '',
-    showDelModal:false,
+    opct:false,
+    showDelModal: false,
     load: true,
     murky: true,
     personDynamic: [],
     animationData: {},
-    delID:'',
-    keyUp:false,
+    delID: '',
+    keyUp: false,
+    thisID: 0,
+    condition: false,
     actions: [
       {
         name: '取消'
@@ -28,7 +31,7 @@ Page({
         loading: false
       }
     ],
-    loginInfo:'',
+    loginInfo: '',
     focus: false,
     currentIndex: -1,
     inputValue: '',
@@ -37,17 +40,17 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({ loginInfo: app.globalData.loginInfo });
+    this.setData({ 'loginInfo': app.globalData.loginInfo });
     this.dynamicsRequest();
   },
   /**
  * 生命周期函数--监听页面显示
  */
   onShow: function () {
-    
+
   },
   //跳发布页
-  promulgate(){
+  promulgate() {
     wx.redirectTo({
       url: 'promulgate/promulgate',
     })
@@ -57,7 +60,7 @@ Page({
     this.showPl();
   },
   // 图片预览
-  preview(e){
+  preview(e) {
     console.log(e);
     wx.previewImage({
       urls: e.target.dataset.src,
@@ -65,7 +68,7 @@ Page({
   },
   // 弹出评论
   showPl(e) {
-    this.setData({ show: !this.data.show, murky: !this.data.murky });
+    this.setData({ show: !this.data.show, murky: !this.data.murky, opct : true });
     var animation = wx.createAnimation({     //评论动画   点击弹出缩入
       transformOrigin: "50% 50%",
       duration: 500,
@@ -76,7 +79,7 @@ Page({
       animation.translate('-9rem').step();
       this.setData({
         animationData: animation.export(),
-        thisDH:e.currentTarget.dataset.id
+        thisDH: e.currentTarget.dataset.id
       })
     } else {
       animation.translate('0rem').step();
@@ -125,6 +128,7 @@ Page({
     var data = { id: personDynamic[index].id }
     app.http(app.d.hostUrl + 'Dynamic/like', data, 'post');
     this.setData({ personDynamic: personDynamic });
+    this.showPl();
   },
   //取消点赞
   noLike(e) {
@@ -141,10 +145,11 @@ Page({
     var data = { id: personDynamic[index].id }
     app.http(app.d.hostUrl + 'Dynamic/noLike', data, 'post');
     this.setData({ personDynamic: personDynamic });
+    this.showPl();
   },
   // 评论
   clickMsg(e) {
-    this.setData({ focus: true });
+    this.setData({ focus: true ,opct:false});
     console.log({ '评论': e });
     this.setData({ currentIndex: e.currentTarget.dataset.index });
   },
@@ -158,6 +163,7 @@ Page({
     var index = this.data.currentIndex;
     var value = this.data.inputValue;
     var list = this.data.personDynamic;
+    console.log(index);
     console.log(list);
     var url = app.d.hostUrl + 'Dynamic/comment';
     var data = { id: list[index]['id'], msg: value }, that = this;
@@ -165,7 +171,6 @@ Page({
     app.http(url, data, 'post', function (res) {
       data.nickname = app.globalData.loginInfo.nickname;
       list[index]['commList'] = list[index]['commList'].concat(data);
-      list[index]['showLike'] = true;
 
       console.log(list[index]['commList'].concat(data))
       console.log(res);
@@ -173,17 +178,18 @@ Page({
 
     })
     this.setData({ inputValue: '' });
+    this.showPl();
   },
   // 评论折叠
   loadAll(e) {
     console.log(e);
-    this.setData({ condition: !this.data.condition });
+    this.setData({ condition: !this.data.condition, thisID: e.currentTarget.dataset.id.id });
   },
   // 动态请求
   dynamicsRequest() {
     var that = this;
     var url = app.d.hostUrl + 'Dynamic/person',
-        data = { page: that.data.page };
+      data = { page: that.data.page };
     app.http(url, data, 'get', function (res) {
       console.log({ '动态列表': res });
       //遍历数据列表 更改列表里的一项属性值(时间的显示)
@@ -198,39 +204,39 @@ Page({
         // console.log({ '指定毫秒数': getMs });
         var nowMs = new Date().getTime();
         // console.log({ '当前毫秒数': nowMs });
-        var timeLag = nowMs/1000 - getMs/1000;
-        if (timeLag>86400){   //判读时间距今超多一天没有
+        var timeLag = nowMs / 1000 - getMs / 1000;
+        if (timeLag > 86400) {   //判读时间距今超多一天没有
           v.add_time = timeArr[0];
-        }else{
+        } else {
           v.add_time = timeArr[1];
         }
       });
       //判断数据量 然后根据数据量控制页底的显示与提示
-      if (that.data.page == 1 && res.length<10){ 
+      if (that.data.page == 1 && res.length < 10) {
         that.setData({ load: false, tip: '目前没有了', personDynamic: that.data.personDynamic.concat(res) });
-      } else if (res.length < 10){
+      } else if (that.data.page != that.data.page && res.length < 10) {
         that.setData({ load: false, tip: '已经到底了', personDynamic: that.data.personDynamic.concat(res) });
       } else {
         that.setData({ load: true, tip: '正在加载', personDynamic: that.data.personDynamic.concat(res) });
       }
       //给动态列表 添加一个属性 该属性用于控制页面是否显示点赞栏
-      that.data.personDynamic.forEach(v=>{
+      that.data.personDynamic.forEach(v => {
         v['showLike'] = Object.keys(v.user_like).length !== 0;
       });
       that.setData({ personDynamic: that.data.personDynamic });
       console.log({ 'personDynamic': that.data.personDynamic });
-    },function(res){//查不到数据的函数 提示异常
+    }, function (res) {//查不到数据的函数 提示异常
       console.log({ '异常': res });
       if (that.data.page > 1) {
         that.setData({ load: false, tip: '已经没有了', personDynamic: that.data.personDynamic.concat(res) });
       } else {
-        that.setData({ load : false, tip: '暂无数据', personDynamic : res });
+        that.setData({ load: false, tip: '暂无数据', personDynamic: res });
       }
     });
   },
   //删除模态框
-  delModal(e){
-    this.setData({ showDelModal: true, delID: e.currentTarget.dataset.id});
+  delModal(e) {
+    this.setData({ showDelModal: true, delID: e.currentTarget.dataset.id });
   },
   //动态删除 确认
   delDynamic({ detail }) {
@@ -245,9 +251,9 @@ Page({
       for (var i = 0; i < that.data.personDynamic.length; i++) {
         if (that.data.delID == that.data.personDynamic[i].id) {
           that.data.personDynamic.splice(i, 1);
-          console.log({'id': that.data.delID});
+          console.log({ 'id': that.data.delID });
           app.http(app.d.hostUrl + 'Dynamic/del', { id: that.data.delID }, 'post');
-          that.setData({ personDynamic: that.data.personDynamic, actions: action});
+          that.setData({ personDynamic: that.data.personDynamic, actions: action });
         }
       }
 
@@ -264,5 +270,5 @@ Page({
       }, 500);
     }
   },
-  
+
 })

@@ -1,16 +1,17 @@
 <!--pages/my/dynamic/dynamic.wxml-->
 <!-- 评论输入框 -->
-<view class='inputComments' hidden='{{!show}}'>
+<view style='{{opct?"opacity: 0;":"opacity: 1;"}}' class='inputComments' hidden='{{!show}}'>
   <input type="text" focus='{{focus}}' bindinput="inputMsg" cursor-spacing='{{12}}
   bindconfirm="confirmMsg" value="{{inputValue}}"></input>
   <button catchtap="confirmMsg">确定</button>
 </view>
 <i-message id="message" />
-<view hidden='{{murky}}' bindtap='close' class='murky' id='murky'></view>
+
 <view class='promulgate'>
   <icon bindtap='promulgate' class='iconfont icon-pengyouquan'></icon>
 </view>
 <scroll-view style='height:100vh' lower-threshold='50' bindscrolltolower='loadMore' scroll-y class='page'>
+  <view hidden='{{murky}}' bindtap='close' class='murky' id='murky'></view>
   <view wx:for='{{personDynamic}}' wx:key='{{this}}' class='dynamic'>
     <image src='{{loginInfo.photo}}'></image>
     <view class='box'>
@@ -58,14 +59,14 @@
         <view class='message' 
         style='{{item.showLike && item.commList.length!=0?"border-top:1rpx solid #ccc;":"border-top: none"}}'>
           <view wx:for='{{item.commList}}' wx:key='{{this}}' wx:for-item="commList"
-           wx:if='{{index<(condition?item.commList.length:"5")}}'>
+           wx:if='{{index<(thisID==item.id&&condition?item.commList.length:"5")}}'>
             <text style='color: #626F9C; font-weight:600;'>{{commList.nickname}}: </text>
             <text>{{commList.msg}}</text>
           </view>
           <!-- 评论折叠 -->
           <view bindtap='loadAll' wx:if='{{item.commList.length>5}}' style='color:#626F9C;font-size:.8rem'>
-            {{!condition?'展开':'收起'}}
-            <icon class='iconfont {{!condition?"icon-jiantouxia":"icon-icon_arrow_top"}}'></icon>
+            {{thisID==item.id&&condition?'收起':'展开'}}
+            <icon class='iconfont {{thisID==item.id&&condition?"icon-icon_arrow_top":"icon-jiantouxia"}}'></icon>
           </view>
         </view>
       </view>

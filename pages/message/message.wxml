@@ -1,7 +1,7 @@
 <!--pages/message/message.wxml-->
 <view class='page'>
   <view wx:if="{{list.length}}">
-    <view class='chat' bindtap='toDetail' wx:for="{{list}}">
+    <view class='chat' bindtap='toDetail' wx:for="{{list}}" data-index="{{index}}">
       <image src='{{item.photo}}' mode='aspectFill'></image>
       <view class='chat_info'>
         <view class='name'>

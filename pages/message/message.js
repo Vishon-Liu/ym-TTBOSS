@@ -10,33 +10,19 @@ Page({
     list:[],
   },
 
-  toDetail(){
+  toDetail(e){
+    var index = e.currentTarget.dataset.index;
+    var node=this.data.list[index];
+    var data={'id':node.id,'nickname':node.nickname,'photo':node.photo};
     wx.navigateTo({
-      url: 'detail/detail',
+      url: 'detail/detail?user=' +JSON.stringify(data),
     })
   },
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onShow: function (options) {
     this.userRecord();
-    // var that = this;
-    // var timestamp = Date.parse(new Date());
-    // var lastTime = 1531806085;
-    // timestamp = timestamp / 1000;
-    // console.log("当前时间戳为：" + timestamp);
-    // timestamp = timestamp - lastTime;
-    // console.log("当前时间戳为：" + timestamp);
-    // switch (timestamp) {
-    //   case timestamp<36000:
-    //     that.setData({time:"一小时前"});
-    //     break;
-    //   case timestamp > 36000 && timestamp<864000:
-    //     that.setData({ time: "昨天" });
-    //     break;
-    //   default:
-    //     that.setData({ time: "不知道多久" });
-    // }
   },
   //查询用户消息记录
   userRecord:function(){

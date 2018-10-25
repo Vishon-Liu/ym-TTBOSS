@@ -118,16 +118,12 @@ Page({
       console.log({ '转换后': newRes});
       if (that.data.page == 1 && res.length < 10) {
         that.setData({ load: false, tip: '目前没有了', behavior: that.data.behavior.concat(res) });
-      } else if (res.length < 10) {
+      } else if (that.data.page != that.data.page && res.length < 10) {
         that.setData({ load: false, tip: '已经到底了', behavior: that.data.behavior.concat(res) });
       } else {
         that.setData({ load: true, tip: '正在加载', behavior: that.data.behavior.concat(res) });
       }
       console.log({ 'behavior': that.data.behavior });
-      // that.setData({
-      //   tip: '玩命加载...',
-      //   behavior: that.data.behavior.concat(newRes)
-      // });
     },function(res){
       console.log({ '异常': res });
       if (that.data.page > 1) {

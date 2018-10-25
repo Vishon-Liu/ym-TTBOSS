@@ -213,6 +213,7 @@ page{
   justify-content: space-between;
   padding: .5rem;
   box-sizing: border-box;
+  z-index: 19;
 }
 .inputComments input{
   background: #fff;

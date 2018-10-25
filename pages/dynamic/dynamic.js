@@ -7,6 +7,7 @@ Page({
   data: {
     loginInfo:'',
     page:1,
+    opct: false,//输入框透明
     thisDH: '',
     show:false,
     tip:'',
@@ -17,14 +18,14 @@ Page({
     focus:false,
     currentIndex:-1,
     inputValue:'',
+    condition:false,
+    thisID:0,
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({
-      'loginInfo': app.globalData.loginInfo,
-    })
+    this.setData({'loginInfo': app.globalData.loginInfo,})
     this.dynamicsRequest();  
   },
   //评论收起
@@ -33,7 +34,7 @@ Page({
   },
   // 弹出评论
   showPl(e){
-    this.setData({ show: !this.data.show, murky: !this.data.murky});
+    this.setData({ show: !this.data.show, murky: !this.data.murky, opct: true });
     var animation = wx.createAnimation({     //评论动画   点击弹出缩入
       transformOrigin: "50% 50%",
       duration: 500,
@@ -93,6 +94,7 @@ Page({
     var data = { id: companyDynamic[index].id }
     app.http(app.d.hostUrl + 'Dynamic/like', data, 'post');
     this.setData({ companyDynamic: companyDynamic });
+    this.showPl();
   },
   //取消点赞
   noLike(e){
@@ -109,10 +111,11 @@ Page({
     var data = { id: companyDynamic[index].id }
     app.http(app.d.hostUrl + 'Dynamic/noLike',data , 'post');
     this.setData({ companyDynamic: companyDynamic });
+    this.showPl();
   },
-  // 评论
+  // 评论||聚焦
   clickMsg(e){
-    this.setData({ focus:true});
+    this.setData({ focus: true, opct: false});
     console.log({'评论':e});
     this.setData({ currentIndex: e.currentTarget.dataset.index});
   },
@@ -123,9 +126,10 @@ Page({
   //确定评论
   confirmMsg:function(){
     console.log(11)
-    var index=this.data.currentIndex;
-    var value=this.data.inputValue;
+    var index = this.data.currentIndex;
+    var value = this.data.inputValue;
     var list = this.data.companyDynamic;
+    console.log(index)
     console.log(list);
     var url = app.d.hostUrl +'Dynamic/comment';
     var data={id:list[index]['id'],msg:value},that=this;
@@ -133,7 +137,6 @@ Page({
     app.http(url,data,'post',function(res){
       data.nickname=app.globalData.loginInfo.nickname;
       list[index]['commList']=list[index]['commList'].concat(data);
-      list[index]['showLike'] = true;
       
       console.log(list[index]['commList'].concat(data))
       console.log(res);
@@ -145,9 +148,8 @@ Page({
   },
   // 评论折叠
   loadAll(e){
-    console.log(e);
-    e.currentTarget.dataset.id.is_like=0;
-    this.setData({ condition: !this.data.condition});
+    console.log({'eee':e});
+    this.setData({ condition: !this.data.condition, thisID: e.currentTarget.dataset.id.id});
   },
   // 动态请求
   dynamicsRequest(){
@@ -178,7 +180,7 @@ Page({
       //判断数据量 然后根据数据量控制页底的显示与提示
       if (that.data.page == 1 && res.length < 10) {
         that.setData({ load: false, tip: '目前没有了', companyDynamic: that.data.companyDynamic.concat(res) });
-      } else if (res.length < 10) {
+      } else if (that.data.page != that.data.page && res.length < 10) {
         that.setData({ load: false, tip: '已经到底了', companyDynamic: that.data.companyDynamic.concat(res) });
       } else {
         that.setData({ load: true, tip: '正在加载', companyDynamic: that.data.companyDynamic.concat(res) });

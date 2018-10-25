@@ -1,123 +1,71 @@
 <!--pages/index/chat/chat.wxml-->
+ <canvas style="width: {{thumbWidth}}px; height: {{thumbHeight}}px;border:1px solid black;position: absolute; left: -1000px; top:-1000px;" canvas-id="firstCanvas"></canvas>
 <view class='pages'>
-  <scroll-view class='chat' scroll-y='{{true}}' enable-back-to-top='{{true}}' scroll-into-view='{{last}}'>
-    <view class='msgTime'>
-      <text>2018-09-19 17:10</text>
+  <scroll-view class='chat' scroll-y='{{true}}' scroll-top='{{chatList.length*1000}}' 
+  enable-back-to-top='{{true}}' upper-threshold='50' scroll-into-view='{{last}} 
+  bindscrolltoupper='history'>
+  
+    <view wx:for="{{chatList}}" wx:for-item="v">
+      <view class='msgTime'>
+        <text>{{v.group_time}}</text>
+      </view>
+      <view wx:for="{{v.list}}" wx:for-item="vo">
+        <view wx:if="{{vo.from_uid==userInfo.id}}">
+          <block wx:if="{{vo.type=='text'}}">
+            <view class='myMsg'>
+              <view class='myInfo'>
+                <text >{{vo.info.msg}}</text>
+              </view>
+              <image class='avatar' src='{{userInfo.photo}}'></image>
+            </view>
+          </block>
+          <block wx:elif="{{vo.type=='image'}}">
+            <view class='myMsg'>
+              <view class='myInfo'>
+                <image class='photo' mode='widthFix' src='{{vo.info.src}}'></image>
+              </view>
+              <image class='avatar' src='{{userInfo.photo}}'></image>
+            </view>
+          </block>
+          <block wx:elif="{{vo.type=='goods'}}">
+             <view class='myMsg'>
+              <view class='myInfo'>
+                <view class='advisory'>
+                  <text class='title' selectable='true'>来自:{{userInfo.nickname}}</text>
+                  <view class='product'>
+                    <image class='pic' src="{{vo.info.title_img}}"></image>
+                    <view class='price'>
+                      <text class='ellipsis' selectable='true'>商品:{{vo.info.title}}</text>
+                      <text selectable='true'>价格:{{vo.price}}</text>
+                    </view>
+                  </view>
+                </view>
+              </view>
+              <image class='avatar' src='{{userInfo.photo}}'></image>
+            </view>
+          </block>
+        </view>
+        <view wx:else>
+          <block wx:if="{{vo.type=='text'}}">
+            <view class='otherMsg'>
+              <image class='avatar' src='{{staffInfo.photo}}'></image>
+              <view class='otherInfo'>
+                <text selectable='true'>{{vo.info.msg}}</text>
+              </view>
+            </view>
+          </block>
+          <block wx:elif="{{vo.type=='image'}}">
+            <view class='otherMsg'>
+              <image class='avatar' src='{{staffInfo.photo}}'></image>
+              <view class='otherInfo'>
+                <image class='photo' mode='widthFix' src='{{vo.info.src}}'></image>
+              </view>
+            </view>
+          </block>
+        </view>
+      </view>
     </view>
-    <block>
-      <view class='myMsg'>
-        <view class='myInfo'>
-          <text wx:if='{{false}}' selectable='true'>按时打算发撒旦法撒阿士大夫撒旦</text>
-          <image class='photo' wx:if='{{false}}' mode='widthFix' src='https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=4001093060,1426723035&fm=27&gp=0.jpg'></image>
-          <view class='advisory'>
-            <text class='title' selectable='true'>来自:郭采洁</text>
-            <view class='product'>
-              <image class='pic'></image>
-              <view class='price'>
-                <text class='ellipsis' selectable='true'>商品:郭采洁,阿士大夫撒旦法撒旦法撒旦飞洒地方的说法撒旦飞洒地方阿萨德法师打发但是</text>
-                <text selectable='true'>价格:188</text>
-              </view>
-            </view>
-          </view>
-        </view>
-        <image class='avatar' src='{{myAvatar}}'></image>
-      </view>
-    </block>
-    <block>
-      <view class='myMsg'>
-        <view class='myInfo'>
-          <text wx:if='{{false}}' selectable='true'>按时打算发撒旦法撒阿士大夫撒旦</text>
-          <image class='photo' mode='widthFix' src='https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=4001093060,1426723035&fm=27&gp=0.jpg'></image>
-          <view wx:if='{{false}}' class='advisory'>
-            <text class='title' selectable='true'>来自:郭采洁</text>
-            <view class='product'>
-              <image class='pic'></image>
-              <view class='price'>
-                <text class='ellipsis' selectable='true'>商品:郭采洁,阿士大夫撒旦法撒旦法撒旦飞洒地方的说法撒旦飞洒地方阿萨德法师打发但是</text>
-                <text selectable='true'>价格:188</text>
-              </view>
-            </view>
-          </view>
-        </view>
-        <image class='avatar' src='{{myAvatar}}'></image>
-      </view>
-    </block>
-    <block>
-      <view class='otherMsg'>
-        <image class='avatar' src='{{myAvatar}}'></image>
-        <view class='otherInfo'>
-          <text wx:if='{{false}}' selectable='true'>按时打算发撒旦法撒阿士大夫撒旦</text>
-          <image class='photo' mode='widthFix' src='https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2073363455,1946074384&fm=111&gp=0.jpg'></image>
-          <view wx:if='{{false}}' class='advisory'>
-            <text class='title' selectable='true'>来自:郭采洁</text>
-            <view class='product'>
-              <image class='pic'></image>
-              <view class='price'>
-                <text class='ellipsis' selectable='true'>商品:郭采洁,阿士大夫撒旦法撒旦法撒旦飞洒地方的说法撒旦飞洒地方阿萨德法师打发但是</text>
-                <text selectable='true'>价格:188</text>
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-    </block>
-    <block>
-      <view class='myMsg'>
-        <view class='myInfo'>
-          <text selectable='true'>按时打算发撒旦法撒阿士大夫撒旦</text>
-          <image wx:if='{{false}}' class='photo' mode='widthFix' src='https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=4001093060,1426723035&fm=27&gp=0.jpg'></image>
-          <view wx:if='{{false}}' class='advisory'>
-            <text class='title' selectable='true'>来自:郭采洁</text>
-            <view class='product'>
-              <image class='pic'></image>
-              <view class='price'>
-                <text class='ellipsis' selectable='true'>商品:郭采洁,阿士大夫撒旦法撒旦法撒旦飞洒地方的说法撒旦飞洒地方阿萨德法师打发但是</text>
-                <text selectable='true'>价格:188</text>
-              </view>
-            </view>
-          </view>
-        </view>
-        <image class='avatar' src='{{myAvatar}}'></image>
-      </view>
-    </block>
-    <block>
-      <view class='otherMsg'>
-        <image class='avatar' src='{{myAvatar}}'></image>
-        <view class='otherInfo'>
-          <text selectable='true'>按时打算发撒旦法撒阿士大夫撒旦</text>
-          <image wx:if='{{false}}' class='photo' mode='widthFix' src='https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2073363455,1946074384&fm=111&gp=0.jpg'></image>
-          <view wx:if='{{false}}' class='advisory'>
-            <text class='title' selectable='true'>来自:郭采洁</text>
-            <view class='product'>
-              <image class='pic'></image>
-              <view class='price'>
-                <text class='ellipsis' selectable='true'>商品:郭采洁,阿士大夫撒旦法撒旦法撒旦飞洒地方的说法撒旦飞洒地方阿萨德法师打发但是</text>
-                <text selectable='true'>价格:188</text>
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-    </block>
-    <block>
-      <view class='otherMsg' id='last'>
-        <image class='avatar' src='{{myAvatar}}'></image>
-        <view class='otherInfo'>
-          <text wx:if='{{false}}' selectable='true'>按时打算发撒旦法撒阿士大夫撒旦</text>
-          <image wx:if='{{false}}' class='photo' mode='widthFix' src='https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2073363455,1946074384&fm=111&gp=0.jpg'></image>
-          <view class='advisory'>
-            <text class='title' selectable='true'>来自:郭采洁</text>
-            <view class='product'>
-              <image class='pic'></image>
-              <view class='price'>
-                <text class='ellipsis' selectable='true'>商品:郭采洁,阿士大夫撒旦法撒旦法撒旦飞洒地方的说法撒旦飞洒地方阿萨德法师打发但是</text>
-                <text selectable='true'>价格:188</text>
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-    </block>
+    
   </scroll-view>
   <view class='input'>
     <!-- <view class='default'>
@@ -127,21 +75,11 @@
       <text>保存名片码</text>
     </view> -->
     <view class='typing'>
-      <textarea adjust-position maxlength='500' fixed='{{true}}' cursor-spacing='12'
-       auto-height show-confirm-bar='{{false}}' bindinput='getVal' value='{{msg}}'></textarea>
+      <textarea adjust-position maxlength='500' fixed='{{true}}'
+       auto-height show-confirm-bar='{{false}}' bindinput='inputMsg' value="{{msg}}"></textarea>
       <view>
-        <icon class='iconfont icon-biaoqing-copy' bindtap='toggleEmojis'></icon>
         <icon bindtap='upImg' wx:if='{{msg===""}}' style='font-size:1.7rem' class='iconfont icon-add'></icon>
-        <text wx:else class='send'>发送</text>
-      </view>
-    </view>
-
-    <view wx:if="{{showEmojis}}" class="emojis_box">
-      <view class="emoji_wrap" wx:for="{{emojiList}}" wx:key="key">
-        <image catchtap="clickEmoji" src="{{item.img}}" data-key="{{item.key}}" class="emoji"></image>
-      </view>
-      <view class="emoji_wrap">
-        <text catchtap="sendMsg" class="emoji_send">发送</text>
+        <text wx:else class='send' catchtap="sendMsg">发送</text>
       </view>
     </view>
   </view>

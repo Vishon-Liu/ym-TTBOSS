@@ -108,11 +108,11 @@ page{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 10;
   height: 2rem;
   width: 9rem;
   overflow: hidden;
   position: relative;
+  z-index: 20;
 }
 .infoBox{
   width: 9rem;
@@ -201,7 +201,7 @@ page{
   justify-content: space-between;
   padding: .5rem;
   box-sizing: border-box;
-  z-index: 666;
+  z-index: 19;
 }
 .inputComments input{
   background: #fff;
