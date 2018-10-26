@@ -107,13 +107,24 @@ Page({
     userInfo: '',//用户信息
     goodsInfo: false,//'是否咨询商品',
     page: 1,
+    scrollTop: '',
+    is_load: true,//是否还有更多
+    is_loadOk: true,//是否加载完成
+    lastTopIndex: 0,//记录上次头部的位置
+    showHeight: 0,//可见视图的高度
   },
   onLoad: function (options) {
-    this.setData({
-      userInfo: JSON.parse(options.user),
-      staffInfo: app.globalData.loginInfo,
-    })
     var that = this;
+    //获取节点信息
+    wx.getSystemInfo({
+      success: function (res) {
+        that.setData({
+          showHeight: res.windowHeight,
+          userInfo: JSON.parse(options.user),
+          staffInfo: app.globalData.loginInfo, 
+        })
+      },
+    })
     //创建worker进程
     worker = wx.createWorker('workers/fib/index.js');
     //获取worker进程返回的消息
@@ -140,8 +151,11 @@ Page({
     wx.onSocketMessage(function (e) {
       console.log(e);
       var data = JSON.parse(e.data);
-      data.from_uid = that.data.userInfo.id;
-      that.pushChat(data);
+      if (data.type == 'text' || data.type == 'goods' || data.type == 'image' ){
+        data.from_uid = that.data.userInfo.id;
+        that.pushChat(data);
+      }
+      
     })
     //监听WebSocket 服务器的连接关闭
     wx.onSocketClose(function (e) {
@@ -155,6 +169,7 @@ Page({
   },
   //分页查询聊天记录
   chatList: function () {
+    wx.showLoading({ title: '加载中' })
     var url = app.d.hostUrl + 'user/chatRecord', that = this;
     var data = {
       page: this.data.page,
@@ -163,23 +178,51 @@ Page({
     };
     app.http(url, data, 'get', function (res) {
       console.log(res);
-      that.setData({ chatList: that.data.chatList.concat(res) })
-      console.log(that.data.chatList)
+      if (that.data.page > 1) {
+        that.setData({
+          lastTopIndex: res.length,
+          chatList: res.concat(that.data.chatList),
+          scrollTop: 0,
+        }, function () {
+          setTimeout(that.getNodeInfo, 100);
+        })
+        console.log(that.data.lastTopIndex);
+      } else {
 
+        that.setData({
+          chatList: res.concat(that.data.chatList),
+          scrollTop: 1000000000000,
+        });
+        wx.hideLoading();
+      }
+
+    }, function () {
+      wx.hideLoading();
+      that.setData({ is_load: false });
+    })
+  },
+  getNodeInfo: function () {
+    var that = this;
+    const query = wx.createSelectorQuery()
+    query.select('.head-node').boundingClientRect()
+    query.selectViewport().scrollOffset()
+    query.exec(function (res) {
+      wx.hideLoading()
+      that.setData({
+        scrollTop: res[0].top,
+        is_loadOk: true,
+      });
+      console.log(res)
     })
   },
   //查看聊天历史记录
   history() {
     var that = this;
-    console.log('查看聊天历史记录');
-    var beforePage = that.data.page;
-    console.log({ '之前页': that.data.page });
-    if (that.data.load) {
-      that.setData({ page: that.data.page + 1 });
-    }
-    if (that.data.page != beforePage) {
+    if (this.data.is_load && this.data.is_loadOk) {
+      that.setData({ 'is_loadOk': false, page: that.data.page + 1 });
       that.chatList();
     }
+    console.log('查看聊天历史记录');
   },
   //增加聊天内容
   pushChat: function (data) {
@@ -198,7 +241,10 @@ Page({
         'list': [data],
       }]
     }
-    this.setData({ chatList: list })
+    this.setData({ 
+      chatList: list ,
+      scrollTop: 100000+Math.ceil(Math.random() * 10000),
+    })
   },
   //获取用户输入的内容
   inputMsg: function (e) {
