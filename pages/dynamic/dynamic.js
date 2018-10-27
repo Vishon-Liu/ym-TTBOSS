@@ -5,35 +5,35 @@ Page({
    * 页面的初始数据
    */
   data: {
-    loginInfo:'',
-    page:1,
+    loginInfo: '',
+    page: 1,
     opct: false,//输入框透明
     thisDH: '',
-    show:false,
-    tip:'',
+    show: false,
+    tip: '',
     load: true,
     murky: true,
-    companyDynamic:[],
-    animationData:{},
-    focus:false,
-    currentIndex:-1,
-    inputValue:'',
-    condition:false,
-    thisID:0,
+    companyDynamic: [],
+    animationData: {},
+    focus: false,
+    currentIndex: -1,
+    inputValue: '',
+    condition: false,
+    thisID: 0,
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({'loginInfo': app.globalData.loginInfo,})
-    this.dynamicsRequest();  
+    this.setData({ 'loginInfo': app.globalData.loginInfo, })
+    this.dynamicsRequest();
   },
   //评论收起
   close() {
     this.showPl();
   },
   // 弹出评论
-  showPl(e){
+  showPl(e) {
     this.setData({ show: !this.data.show, murky: !this.data.murky, opct: true });
     var animation = wx.createAnimation({     //评论动画   点击弹出缩入
       transformOrigin: "50% 50%",
@@ -41,13 +41,13 @@ Page({
       timingFunction: "linear",
       delay: 0
     });
-    if(this.data.show){
+    if (this.data.show) {
       animation.translate('-9rem').step();
       this.setData({
         animationData: animation.export(),
         thisDH: e.currentTarget.dataset.id
       })
-    }else{
+    } else {
       animation.translate('0rem').step();
       this.setData({
         animationData: animation.export()
@@ -56,19 +56,19 @@ Page({
     }
   },
   // 跳转到详情
-  toDetail(e){
-    console.log({'跳转到详情':e});
+  toDetail(e) {
+    console.log({ '跳转到详情': e });
     wx.navigateTo({
       url: './detail?id=' + e.currentTarget.dataset.id,
-      fail:function(res){
-        console.log({'kjbo':res});
+      fail: function (res) {
+        console.log({ 'kjbo': res });
       }
     })
   },
   //下拉加载更多
-  loadMore(e){
+  loadMore(e) {
     var that = this;
-    console.log({'加载更多':e});
+    console.log({ '加载更多': e });
     var beforePage = that.data.page;
     console.log({ '之前页': that.data.page });
     if (that.data.load) {
@@ -81,14 +81,14 @@ Page({
   // 点赞
   clickLike(e) {
     var id = this.data.loginInfo['id'];
-    var nickname=this.data.loginInfo['nickname'];
+    var nickname = this.data.loginInfo['nickname'];
     var index = e.currentTarget.dataset.index;
     var companyDynamic = this.data.companyDynamic;
     companyDynamic[index]['is_like'] = 1;
-    if (companyDynamic[index]['user_like'].length == undefined){
+    if (companyDynamic[index]['user_like'].length == undefined) {
       companyDynamic[index]['user_like'][id] = nickname;
-    }else{
-      companyDynamic[index]['user_like'] = { [id]: nickname} ;
+    } else {
+      companyDynamic[index]['user_like'] = { [id]: nickname };
     }
     companyDynamic[index]['showLike'] = true;
     var data = { id: companyDynamic[index].id }
@@ -97,67 +97,67 @@ Page({
     this.showPl();
   },
   //取消点赞
-  noLike(e){
+  noLike(e) {
     var id = this.data.loginInfo['id'];
     var index = e.currentTarget.dataset.index;
     var companyDynamic = this.data.companyDynamic;
-    companyDynamic[index]['is_like']=0;
+    companyDynamic[index]['is_like'] = 0;
     delete companyDynamic[index]['user_like'][id];
-    var showLike=false;
-    for (var i in companyDynamic[index]['user_like']){
-      showLike=true;break;
+    var showLike = false;
+    for (var i in companyDynamic[index]['user_like']) {
+      showLike = true; break;
     }
     companyDynamic[index]['showLike'] = showLike;
     var data = { id: companyDynamic[index].id }
-    app.http(app.d.hostUrl + 'Dynamic/noLike',data , 'post');
+    app.http(app.d.hostUrl + 'Dynamic/noLike', data, 'post');
     this.setData({ companyDynamic: companyDynamic });
     this.showPl();
   },
   // 评论||聚焦
-  clickMsg(e){
-    this.setData({ focus: true, opct: false});
-    console.log({'评论':e});
-    this.setData({ currentIndex: e.currentTarget.dataset.index});
+  clickMsg(e) {
+    this.setData({ focus: true, opct: false });
+    console.log({ '评论': e });
+    this.setData({ currentIndex: e.currentTarget.dataset.index });
   },
   //输入评论
-  inputMsg:function(e){
-    this.setData({ inputValue: e.detail.value});
+  inputMsg: function (e) {
+    this.setData({ inputValue: e.detail.value });
   },
   //确定评论
-  confirmMsg:function(){
+  confirmMsg: function () {
     console.log(11)
     var index = this.data.currentIndex;
     var value = this.data.inputValue;
     var list = this.data.companyDynamic;
     console.log(index)
     console.log(list);
-    var url = app.d.hostUrl +'Dynamic/comment';
-    var data={id:list[index]['id'],msg:value},that=this;
+    var url = app.d.hostUrl + 'Dynamic/comment';
+    var data = { id: list[index]['id'], msg: value }, that = this;
     console.log(list[index])
-    app.http(url,data,'post',function(res){
-      data.nickname=app.globalData.loginInfo.nickname;
-      list[index]['commList']=list[index]['commList'].concat(data);
-      
+    app.http(url, data, 'post', function (res) {
+      data.nickname = app.globalData.loginInfo.nickname;
+      list[index]['commList'] = list[index]['commList'].concat(data);
+
       console.log(list[index]['commList'].concat(data))
       console.log(res);
-      that.setData({ companyDynamic: list});
-      
+      that.setData({ companyDynamic: list });
+
     })
-    this.setData({inputValue:''});
+    this.setData({ inputValue: '' });
     this.showPl();
   },
   // 评论折叠
-  loadAll(e){
-    console.log({'eee':e});
-    this.setData({ condition: !this.data.condition, thisID: e.currentTarget.dataset.id.id});
+  loadAll(e) {
+    console.log({ 'eee': e });
+    this.setData({ condition: !this.data.condition, thisID: e.currentTarget.dataset.id.id });
   },
   // 动态请求
-  dynamicsRequest(){
+  dynamicsRequest() {
     var that = this;
     var url = app.d.hostUrl + 'Dynamic/company',
-        data = { page:that.data.page };
-    app.http(url,data,'get',function(res){
-      console.log({'动态列表':res});
+      data = { page: that.data.page };
+    app.http(url, data, 'get', function (res) {
+      console.log({ '动态列表': res });
       //遍历数据列表 更改列表里的一项属性值(时间的显示)
       res.forEach(v => {    //改变时间显示方式
         var timeArr = v.add_time.split(" ");
@@ -191,7 +191,7 @@ Page({
       });
       that.setData({ companyDynamic: that.data.companyDynamic });
       console.log({ 'companyDynamic': that.data.companyDynamic });
-    },function(res){
+    }, function (res) {
       console.log({ '异常': res });
       if (that.data.page > 1) {
         that.setData({ load: false, tip: '已经没有了', companyDynamic: that.data.companyDynamic.concat(res) });
@@ -200,5 +200,5 @@ Page({
       }
     });
   },
-  
+
 })

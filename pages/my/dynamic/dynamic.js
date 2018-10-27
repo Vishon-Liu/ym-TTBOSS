@@ -1,5 +1,7 @@
 // pages/my/dynamic/dynamic.js
-const { $Message } = require('../../../dist/base/index');
+const {
+  $Message
+} = require('../../../dist/base/index');
 const app = getApp();
 Page({
 
@@ -11,7 +13,7 @@ Page({
     thisDH: '',
     show: false,
     tip: '',
-    opct:false,
+    opct: false,
     showDelModal: false,
     load: true,
     murky: true,
@@ -21,8 +23,7 @@ Page({
     keyUp: false,
     thisID: 0,
     condition: false,
-    actions: [
-      {
+    actions: [{
         name: '取消'
       },
       {
@@ -39,14 +40,16 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-    this.setData({ 'loginInfo': app.globalData.loginInfo });
+  onLoad: function(options) {
+    this.setData({
+      'loginInfo': app.globalData.loginInfo
+    });
     this.dynamicsRequest();
   },
   /**
- * 生命周期函数--监听页面显示
- */
-  onShow: function () {
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function() {
 
   },
   //跳发布页
@@ -68,8 +71,12 @@ Page({
   },
   // 弹出评论
   showPl(e) {
-    this.setData({ show: !this.data.show, murky: !this.data.murky, opct : true });
-    var animation = wx.createAnimation({     //评论动画   点击弹出缩入
+    this.setData({
+      show: !this.data.show,
+      murky: !this.data.murky,
+      opct: true
+    });
+    var animation = wx.createAnimation({ //评论动画   点击弹出缩入
       transformOrigin: "50% 50%",
       duration: 500,
       timingFunction: "linear",
@@ -92,11 +99,17 @@ Page({
   //下拉加载更多
   loadMore(e) {
     var that = this;
-    console.log({ '加载更多': e });
+    console.log({
+      '加载更多': e
+    });
     var beforePage = that.data.page;
-    console.log({ '之前页': that.data.page });
+    console.log({
+      '之前页': that.data.page
+    });
     if (that.data.load) {
-      that.setData({ page: that.data.page + 1 });
+      that.setData({
+        page: that.data.page + 1
+      });
     }
     if (that.data.page != beforePage) {
       that.dynamicsRequest();
@@ -104,11 +117,15 @@ Page({
   },
   // 跳转到详情
   toDetail(e) {
-    console.log({ '跳转到详情': e });
+    console.log({
+      '跳转到详情': e
+    });
     wx.navigateTo({
       url: './detail?id=' + e.currentTarget.dataset.id,
-      fail: function (res) {
-        console.log({ 'kjbo': res });
+      fail: function(res) {
+        console.log({
+          'kjbo': res
+        });
       }
     })
   },
@@ -122,12 +139,18 @@ Page({
     if (personDynamic[index]['user_like'].length == undefined) {
       personDynamic[index]['user_like'][id] = nickname;
     } else {
-      personDynamic[index]['user_like'] = { [id]: nickname };
+      personDynamic[index]['user_like'] = {
+        [id]: nickname
+      };
     }
     personDynamic[index]['showLike'] = true;
-    var data = { id: personDynamic[index].id }
+    var data = {
+      id: personDynamic[index].id
+    }
     app.http(app.d.hostUrl + 'Dynamic/like', data, 'post');
-    this.setData({ personDynamic: personDynamic });
+    this.setData({
+      personDynamic: personDynamic
+    });
     this.showPl();
   },
   //取消点赞
@@ -139,26 +162,40 @@ Page({
     delete personDynamic[index]['user_like'][id];
     var showLike = false;
     for (var i in personDynamic[index]['user_like']) {
-      showLike = true; break;
+      showLike = true;
+      break;
     }
     personDynamic[index]['showLike'] = showLike;
-    var data = { id: personDynamic[index].id }
+    var data = {
+      id: personDynamic[index].id
+    }
     app.http(app.d.hostUrl + 'Dynamic/noLike', data, 'post');
-    this.setData({ personDynamic: personDynamic });
+    this.setData({
+      personDynamic: personDynamic
+    });
     this.showPl();
   },
   // 评论
   clickMsg(e) {
-    this.setData({ focus: true ,opct:false});
-    console.log({ '评论': e });
-    this.setData({ currentIndex: e.currentTarget.dataset.index });
+    this.setData({
+      focus: true,
+      opct: false
+    });
+    console.log({
+      '评论': e
+    });
+    this.setData({
+      currentIndex: e.currentTarget.dataset.index
+    });
   },
   //输入评论
-  inputMsg: function (e) {
-    this.setData({ inputValue: e.detail.value });
+  inputMsg: function(e) {
+    this.setData({
+      inputValue: e.detail.value
+    });
   },
   //确定评论
-  confirmMsg: function () {
+  confirmMsg: function() {
     console.log(11)
     var index = this.data.currentIndex;
     var value = this.data.inputValue;
@@ -166,34 +203,49 @@ Page({
     console.log(index);
     console.log(list);
     var url = app.d.hostUrl + 'Dynamic/comment';
-    var data = { id: list[index]['id'], msg: value }, that = this;
+    var data = {
+        id: list[index]['id'],
+        msg: value
+      },
+      that = this;
     console.log(list[index])
-    app.http(url, data, 'post', function (res) {
+    app.http(url, data, 'post', function(res) {
       data.nickname = app.globalData.loginInfo.nickname;
       list[index]['commList'] = list[index]['commList'].concat(data);
 
       console.log(list[index]['commList'].concat(data))
       console.log(res);
-      that.setData({ personDynamic: list });
+      that.setData({
+        personDynamic: list
+      });
 
     })
-    this.setData({ inputValue: '' });
+    this.setData({
+      inputValue: ''
+    });
     this.showPl();
   },
   // 评论折叠
   loadAll(e) {
     console.log(e);
-    this.setData({ condition: !this.data.condition, thisID: e.currentTarget.dataset.id.id });
+    this.setData({
+      condition: !this.data.condition,
+      thisID: e.currentTarget.dataset.id.id
+    });
   },
   // 动态请求
   dynamicsRequest() {
     var that = this;
     var url = app.d.hostUrl + 'Dynamic/person',
-      data = { page: that.data.page };
-    app.http(url, data, 'get', function (res) {
-      console.log({ '动态列表': res });
+      data = {
+        page: that.data.page
+      };
+    app.http(url, data, 'get', function(res) {
+      console.log({
+        '动态列表': res
+      });
       //遍历数据列表 更改列表里的一项属性值(时间的显示)
-      res.forEach(v => {    //改变时间显示方式
+      res.forEach(v => { //改变时间显示方式
         var timeArr = v.add_time.split(" ");
         // console.log({ '时间数组': timeArr});
         var oldFormat = v.add_time;
@@ -205,7 +257,7 @@ Page({
         var nowMs = new Date().getTime();
         // console.log({ '当前毫秒数': nowMs });
         var timeLag = nowMs / 1000 - getMs / 1000;
-        if (timeLag > 86400) {   //判读时间距今超多一天没有
+        if (timeLag > 86400) { //判读时间距今超多一天没有
           v.add_time = timeArr[0];
         } else {
           v.add_time = timeArr[1];
@@ -213,33 +265,64 @@ Page({
       });
       //判断数据量 然后根据数据量控制页底的显示与提示
       if (that.data.page == 1 && res.length < 10) {
-        that.setData({ load: false, tip: '目前没有了', personDynamic: that.data.personDynamic.concat(res) });
+        that.setData({
+          load: false,
+          tip: '目前没有了',
+          personDynamic: that.data.personDynamic.concat(res)
+        });
       } else if (that.data.page != that.data.page && res.length < 10) {
-        that.setData({ load: false, tip: '已经到底了', personDynamic: that.data.personDynamic.concat(res) });
+        that.setData({
+          load: false,
+          tip: '已经到底了',
+          personDynamic: that.data.personDynamic.concat(res)
+        });
       } else {
-        that.setData({ load: true, tip: '正在加载', personDynamic: that.data.personDynamic.concat(res) });
+        that.setData({
+          load: true,
+          tip: '正在加载',
+          personDynamic: that.data.personDynamic.concat(res)
+        });
       }
       //给动态列表 添加一个属性 该属性用于控制页面是否显示点赞栏
       that.data.personDynamic.forEach(v => {
         v['showLike'] = Object.keys(v.user_like).length !== 0;
       });
-      that.setData({ personDynamic: that.data.personDynamic });
-      console.log({ 'personDynamic': that.data.personDynamic });
-    }, function (res) {//查不到数据的函数 提示异常
-      console.log({ '异常': res });
+      that.setData({
+        personDynamic: that.data.personDynamic
+      });
+      console.log({
+        'personDynamic': that.data.personDynamic
+      });
+    }, function(res) { //查不到数据的函数 提示异常
+      console.log({
+        '异常': res
+      });
       if (that.data.page > 1) {
-        that.setData({ load: false, tip: '已经没有了', personDynamic: that.data.personDynamic.concat(res) });
+        that.setData({
+          load: false,
+          tip: '已经没有了',
+          personDynamic: that.data.personDynamic.concat(res)
+        });
       } else {
-        that.setData({ load: false, tip: '暂无数据', personDynamic: res });
+        that.setData({
+          load: false,
+          tip: '暂无数据',
+          personDynamic: res
+        });
       }
     });
   },
   //删除模态框
   delModal(e) {
-    this.setData({ showDelModal: true, delID: e.currentTarget.dataset.id });
+    this.setData({
+      showDelModal: true,
+      delID: e.currentTarget.dataset.id
+    });
   },
   //动态删除 确认
-  delDynamic({ detail }) {
+  delDynamic({
+    detail
+  }) {
     var that = this;
     if (detail.index === 0) {
       this.setData({
@@ -251,9 +334,16 @@ Page({
       for (var i = 0; i < that.data.personDynamic.length; i++) {
         if (that.data.delID == that.data.personDynamic[i].id) {
           that.data.personDynamic.splice(i, 1);
-          console.log({ 'id': that.data.delID });
-          app.http(app.d.hostUrl + 'Dynamic/del', { id: that.data.delID }, 'post');
-          that.setData({ personDynamic: that.data.personDynamic, actions: action });
+          console.log({
+            'id': that.data.delID
+          });
+          app.http(app.d.hostUrl + 'Dynamic/del', {
+            id: that.data.delID
+          }, 'post');
+          that.setData({
+            personDynamic: that.data.personDynamic,
+            actions: action
+          });
         }
       }
 
