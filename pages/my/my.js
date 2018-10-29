@@ -88,19 +88,27 @@ Page({
   },
   //关闭笼罩层
   close(){
+    wx.showTabBar();
     this.setData({ murky: !this.data.murky });
+    //删除worker进程
+    if (worker) {
+      worker.terminate();
+      //删除WebSocket进程
+      msg.close();
+    }
   },
   //生成一键转移二维码
   moveUser:function(){
-    // var img = "http://image.ymindex.com/static/images/photo/20181024/S15n403f79u7t9R9.png";
-    // this.setData({ moveQrcord: img, murky: !this.data.murky});
-   
-    var that=this;
-    var url = app.d.hostUrl +'User/moveToke';
-    app.http(url,[],'get',function(res){
-      that.setData({ moveQrcord: res, murky: !that.data.murky});
-    })
-    this.startLient();
+    var that = this;
+    wx.hideTabBar({
+      success: function () {
+        var url = app.d.hostUrl + 'User/moveToke';
+        app.http(url, [], 'get', function (res) {
+          that.setData({ moveQrcord: res, murky: !that.data.murky });
+        })
+        that.startLient();
+      }
+    });
   },
   //开启监听
   startLient:function(){
@@ -146,15 +154,5 @@ Page({
     wx.onSocketClose(function (e) {
       console.log(e)
     })
-  },
-  onHide:function(){
-    //删除worker进程
-    if (worker){
-      worker.terminate();
-      //删除WebSocket进程
-      msg.close();
-    }
-    
-    
   }
 })
