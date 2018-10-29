@@ -28,7 +28,7 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "卡片",
+        "text": "1",
         "iconPath": "/images/radar.png",
         "selectedIconPath": "/images/radar1.png"
       },
